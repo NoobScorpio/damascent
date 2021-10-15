@@ -1,5 +1,6 @@
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/screens/home_screen.dart';
+import 'package:damascent/screens/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -93,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        push(context, HomeScreen());
+                        push(context, NavigationScreen());
                       },
                       child: Text('Login',
                           style: TextStyle(
