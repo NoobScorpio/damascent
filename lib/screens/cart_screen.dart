@@ -1,7 +1,13 @@
 import 'package:damascent/constants/constants.dart';
+import 'package:damascent/data_management/models/cart_item.dart';
+import 'package:damascent/data_management/models/product.dart';
 import 'package:damascent/screens/checkout_screen.dart';
+import 'package:damascent/screens/profile_screen.dart';
 import 'package:damascent/screens/widgets/product_widget.dart';
+import 'package:damascent/state_management/cart/cart_cubit.dart';
+import 'package:damascent/state_management/cart/cart_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -11,6 +17,13 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  bool empty = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,297 +34,225 @@ class _CartScreenState extends State<CartScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              getHeader(context: context, back: false, text: "Cart"),
+              BlocBuilder<CartCubit, CartState>(builder: (context, state) {
+                if (state is CartLoadedState) {
+                  if (state.cartItems.isEmpty) {
+                    return emptyCart();
+                  }
+
+                  return cartPageWidgets(state.cartItems, state.total);
+                } else if (state is CartItemAddedState) {
+                  if (state.added.isEmpty) {
+                    return emptyCart();
+                  }
+
+                  return cartPageWidgets(state.added, state.total);
+                } else if (state is CartItemRemoveState) {
+                  if (state.removed.isEmpty) {
+                    return emptyCart();
+                  }
+
+                  return cartPageWidgets(state.removed, state.total);
+                }
+                return emptyCart();
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget cartPageWidgets(List<CartItem> cartItems, total) {
+    return Column(
+      children: [
+        ListView.builder(
+          itemCount: cartItems.length,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: ProductWidgetCart(
+                cartItem: cartItems[index],
+                product: cartItems[index].product,
+                qty: cartItems[index].qty,
+              ),
+              // child: SizedBox(),
+            );
+          },
+        ),
+        const SizedBox(
+          height: 50,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        image: DecorationImage(
-                            image: AssetImage("assets/login_bg.png"),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Center(
-                          child: Text(
-                    "Cart",
-                    style: Constants.avgStyleAltBold,
-                  ))),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Card(
-                        elevation: 1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.black,
-                            // size: 25,
-                          ),
-                        ),
+                      Text(
+                        "Payment Detail",
+                        style: Constants.avgStyleAltBold,
                       ),
-                      Card(
-                        elevation: 1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.notifications,
-                            color: Colors.black,
-                            // size: 25,
-                          ),
-                        ),
-                      ),
+                      const SizedBox(),
                     ],
-                  )
-                ],
-              ),
-              ListView.builder(
-                itemCount: 2,
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: ProductWidgetCart(),
-                  );
-                },
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  // height: 140,
-                  child: Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Payment Detail",
-                                style: Constants.avgStyleAltBold,
-                              ),
-                              SizedBox(),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 5),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Dolce & Gabbana",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                    Text(
-                                      "\$120",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  thickness: 0.2,
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 5),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Dolce & Gabbana",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                    Text(
-                                      "\$120",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  thickness: 0.2,
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 5),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Dolce & Gabbana",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                    Text(
-                                      "\$120",
-                                      style: Constants.priceStyleAlt,
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  thickness: 0.2,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 3),
+                          child: Column(
                             children: [
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Total ",
-                                    style: Constants.avgStyleAltBold,
+                                    cartItems[index].product.pname,
+                                    style: Constants.priceStyleAlt,
                                   ),
                                   Text(
-                                    "(3 items)",
+                                    "\$${cartItems[index].product.price} x ${cartItems[index].qty}",
                                     style: Constants.priceStyleAlt,
                                   ),
                                 ],
                               ),
-                              Text(
-                                "\$360",
-                                style: Constants.avgStyleAltBold,
-                              ),
+                              const Divider(
+                                color: Colors.grey,
+                                thickness: 0.2,
+                              )
                             ],
+                          ),
+                        );
+                      }),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Total ",
+                            style: Constants.avgStyleAltBold,
+                          ),
+                          Text(
+                            "(${cartItems.length} items)",
+                            style: Constants.priceStyleAlt,
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              InkWell(
-                onTap: () {
-                  push(context, CheckoutScreen());
-                },
-                child: Center(
-                  child: Container(
-                    // width: 215,
-                    child: Card(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                      Text(
+                        "\$$total",
+                        style: Constants.avgStyleAltBold,
                       ),
-                      elevation: 0,
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        InkWell(
+          onTap: () {
+            push(
+                context,
+                CheckoutScreen(
+                  total: total,
+                  cartItems: cartItems,
+                ));
+          },
+          child: Center(
+            child: Card(
+              color: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 5),
+                        padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      // width: 75,
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey.shade200,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Icon(Icons.delivery_dining),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Text(
-                                      "Choose Delivery Services",
-                                      style: Constants.avgStyleBold,
-                                    ),
-                                  ],
-                                ),
+                            Container(
+                              // width: 75,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8))),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(Icons.delivery_dining),
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Container(
-                                width: 1,
-                                height: 35,
-                                color: Colors.white,
-                              ),
+                            const SizedBox(
+                              width: 15,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                // width: 75,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(Icons.arrow_forward),
-                                ),
-                              ),
+                            Text(
+                              "Choose Delivery Services",
+                              style: Constants.avgStyleBold,
                             ),
                           ],
                         ),
                       ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Container(
+                        width: 1,
+                        height: 35,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // width: 75,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8))),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

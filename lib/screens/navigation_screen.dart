@@ -1,6 +1,6 @@
 import 'package:damascent/screens/cart_screen.dart';
 import 'package:damascent/screens/home_screen.dart';
-import 'package:damascent/screens/search_screen.dart';
+import 'package:damascent/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -14,8 +14,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    SearchScreen(),
-    CartScreen()
+    CartScreen(),
+    WishlistScreen(),
   ];
   void _onItemTapped(int index) {
     setState(() {
@@ -40,14 +40,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("assets/search.png"),
-            activeIcon: Image.asset("assets/Selected_Search.png"),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
             icon: Image.asset("assets/cart.png"),
             activeIcon: Image.asset("assets/Selected_cart.png"),
             label: 'School',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset("assets/Fav.png"),
+            activeIcon: Image.asset("assets/Fav.png"),
+            label: 'Business',
           ),
         ],
         currentIndex: _selectedIndex,

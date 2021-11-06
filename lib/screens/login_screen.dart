@@ -1,11 +1,24 @@
+import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
-import 'package:damascent/screens/home_screen.dart';
 import 'package:damascent/screens/navigation_screen.dart';
+import 'package:damascent/screens/signup_screen.dart';
+import 'package:damascent/state_management/cart/cart_cubit.dart';
+import 'package:damascent/state_management/product/product_cubit.dart';
+import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController email = TextEditingController(),
+      pass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +30,7 @@ class LoginScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: ShaderMask(
               shaderCallback: (rect) {
-                return LinearGradient(
+                return const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Colors.black, Colors.transparent],
@@ -37,66 +50,60 @@ class LoginScreen extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.12,
                   ),
                   Image.asset("assets/white_logo.png"),
-                  SizedBox(
+                  const SizedBox(
                     height: 25,
                   ),
                   Text(
                     "Login",
                     style: Constants.bigStyle,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: TextField(
-                      style: TextStyle(color: Colors.grey),
-                      cursorColor: Colors.white,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        prefixIcon: Icon(
-                          Icons.person_outline_outlined,
-                          color: Colors.grey,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.cyan),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.cyan),
-                        ),
-                      ),
-                    ),
+                    child: getTextField(email, 'Email', Icons.email),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: TextField(
-                      style: TextStyle(color: Colors.grey),
-                      cursorColor: Colors.white,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        prefixIcon: Icon(
-                          Icons.lock_outline,
-                          color: Colors.grey,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.cyan),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.cyan),
-                        ),
+                    child: getTextField(pass, 'Password', Icons.lock_outline),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 50.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Forgot your password?",
+                        style: Constants.smallStyle,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   ElevatedButton(
-                      onPressed: () {
-                        push(context, NavigationScreen());
+                      onPressed: () async {
+                        showToast("Logging in", Constants.primaryColor);
+                        if (email.text != "" && pass.text != "") {
+                          bool loggedIn =
+                              await BlocProvider.of<UserCubit>(context)
+                                  .loginUser(email.text, pass.text);
+                          if (loggedIn) {
+                            showToast("Success", Colors.green);
+                            await BlocProvider.of<CartCubit>(context)
+                                .initializeCart();
+                            await BlocProvider.of<ProductCubit>(context)
+                                .getProducts();
+                            push(context, const NavigationScreen());
+                          }
+                        } else {
+                          showToast("Please fill all fields", Colors.red);
+                        }
                       },
-                      child: Text('Login',
+                      child: const Text('Login',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
@@ -104,44 +111,25 @@ class LoginScreen extends StatelessWidget {
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.white),
-                        padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 150)),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 150)),
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    "Forgot your password?",
-                    style: Constants.smallStyle,
+                  InkWell(
+                    onTap: () {
+                      push(context, const SignUpScreen());
+                    },
+                    child: Text(
+                      "Do not have an account? Sign up here?",
+                      style: Constants.smallStyle,
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    "Or",
-                    style: Constants.smallStyle,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.apple,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      FaIcon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                        size: 25,
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
