@@ -112,6 +112,37 @@ Widget getTextFieldProfile(cont, text) {
   );
 }
 
+Widget getPasswordField(cont, text, obs) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+    child: TextField(
+      controller: cont,
+      style: const TextStyle(color: Colors.grey),
+      cursorColor: Colors.white,
+      obscureText: obs,
+      decoration: InputDecoration(
+        hintText: text.toString(),
+        hintStyle: const TextStyle(color: Colors.grey),
+        suffixIcon: InkWell(
+          onTap: () {
+            obs = !obs;
+          },
+          child: Icon(
+            obs ? Icons.hide_source : Icons.remove_red_eye_outlined,
+            color: Colors.grey,
+          ),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.cyan),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.cyan),
+        ),
+      ),
+    ),
+  );
+}
+
 Widget getTextField(controller, text, icon) {
   return TextField(
     controller: controller,
@@ -202,7 +233,7 @@ class Constants {
   static TextStyle avgStyleAltBold = const TextStyle(
       color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600);
   static TextStyle avgStyleBold = const TextStyle(
-      color: Colors.white, fontSize: 17, fontWeight: FontWeight.w600);
+      color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle avgStyle = const TextStyle(
       color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400);
   static TextStyle priceStyle = const TextStyle(

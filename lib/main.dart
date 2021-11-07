@@ -3,8 +3,10 @@ import 'package:damascent/data_management/repos/product_repo.dart';
 import 'package:damascent/screens/init_screen.dart';
 import 'package:damascent/screens/login_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
+import 'package:damascent/state_management/order/order_cubit.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
+import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,6 +34,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(
             create: (context) =>
                 UserCubit(userRepository: UserRepositoryImpl())),
+        BlocProvider<OrderCubit>(
+            create: (context) =>
+                OrderCubit(productRepository: ProductRepositoryImpl())),
+        BlocProvider<WishlistCubit>(
+            create: (context) =>
+                WishlistCubit(productRepository: ProductRepositoryImpl())),
       ],
       child: MaterialApp(
         title: Constants.appName,

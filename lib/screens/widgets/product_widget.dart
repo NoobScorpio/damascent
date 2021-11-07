@@ -1,8 +1,10 @@
+import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/product.dart';
 import 'package:damascent/screens/product_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
+import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,19 +17,16 @@ class ProductWidgetMain extends StatelessWidget {
       required this.desc,
       required this.price,
       required this.image,
-      required this.product})
+      required this.product,
+      required this.id})
       : super(key: key);
-  final String name, desc, price, image;
+  final String name, desc, price, image, id;
   final Product product;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        push(
-            context,
-            ProductScreen(
-              product: product,
-            ));
+        push(context, ProductScreen(product: product, id: id));
       },
       child: Stack(
         children: [
@@ -127,9 +126,10 @@ class ProductWidgetCard extends StatelessWidget {
       required this.image,
       required this.price,
       required this.discount,
-      required this.product})
+      required this.product,
+      required this.id})
       : super(key: key);
-  final String name, image, price, discount;
+  final String name, image, price, discount, id;
   final Product product;
   @override
   Widget build(BuildContext context) {
@@ -141,6 +141,7 @@ class ProductWidgetCard extends StatelessWidget {
             context,
             ProductScreen(
               product: product,
+              id: id,
             ));
       },
       child: SizedBox(
@@ -202,16 +203,22 @@ class ProductWidgetCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  // width: 75,
-                  decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: const BorderRadius.all(Radius.circular(8))),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.add_shopping_cart),
+              InkWell(
+                onTap: () {
+                  addToCart(product: product, context: context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    // width: 75,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8))),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.add_shopping_cart),
+                    ),
                   ),
                 ),
               ),
@@ -224,9 +231,10 @@ class ProductWidgetCard extends StatelessWidget {
 }
 
 class ProductNotificationCard extends StatelessWidget {
-  const ProductNotificationCard({Key? key, required this.product})
+  const ProductNotificationCard(
+      {Key? key, required this.product, required this.id})
       : super(key: key);
-
+  final String id;
   final Product product;
   @override
   Widget build(BuildContext context) {
@@ -235,6 +243,7 @@ class ProductNotificationCard extends StatelessWidget {
         push(
             context,
             ProductScreen(
+              id: id,
               product: product,
             ));
       },
@@ -500,9 +509,10 @@ class ProductWidgetCart extends StatelessWidget {
 }
 
 class ProductWishlistCard extends StatelessWidget {
-  const ProductWishlistCard({Key? key, required this.product})
+  const ProductWishlistCard({Key? key, required this.product, required this.id})
       : super(key: key);
   final Product product;
+  final String id;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -511,11 +521,12 @@ class ProductWishlistCard extends StatelessWidget {
             context,
             ProductScreen(
               product: product,
+              id: id,
             ));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
+        child: SizedBox(
           // height: 140,
           child: Card(
             elevation: 0,
@@ -533,11 +544,12 @@ class ProductWishlistCard extends StatelessWidget {
                       width: 100,
                       decoration: BoxDecoration(
                           color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
-                        child: Image.asset(
-                          "assets/product.png",
+                        child: Image.network(
+                          "$imageURL/${product.image1}",
                           // scale: 2.5,
                         ),
                       ),
@@ -555,49 +567,73 @@ class ProductWishlistCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Dolce & Gabbana",
+                                product.pname,
                                 style: Constants.avgStyleAltBold,
                               ),
                               Text(
-                                "Solid Mate",
-                                style: TextStyle(
+                                product.keyword,
+                                style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
-                                "\$169",
-                                style: TextStyle(
+                                "\$${product.price}",
+                                style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
+                          const SizedBox(
+                            height: 15,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "",
-                                style: TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
+                              InkWell(
+                                onTap: () {
+                                  addToCart(product: product, context: context);
+                                },
+                                child: Container(
+                                  // width: 75,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8))),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.shopping_cart,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              Container(
-                                // width: 75,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.shopping_cart,
-                                    color: Colors.black,
+                              InkWell(
+                                onTap: () async {
+                                  showToast(
+                                      "Removing Item", Constants.primaryColor);
+                                  await BlocProvider.of<WishlistCubit>(context)
+                                      .removeWishlistProduct(
+                                          pid: product.pId, id: id);
+                                },
+                                child: Container(
+                                  // width: 75,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8))),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),

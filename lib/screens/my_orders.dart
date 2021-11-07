@@ -1,17 +1,28 @@
 import 'package:damascent/constants/constants.dart';
+import 'package:damascent/state_management/order/order_cubit.dart';
+import 'package:damascent/state_management/order/order_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyOrdersScreen extends StatefulWidget {
-  const MyOrdersScreen({Key? key}) : super(key: key);
+  const MyOrdersScreen({Key? key, required this.id}) : super(key: key);
 
+  final String id;
   @override
   _MyOrdersScreenState createState() => _MyOrdersScreenState();
 }
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
-  bool delivered = true;
-  bool processing = false;
-  bool cancelled = false;
+  bool delivered = false;
+  bool processing = true;
+  bool shipped = false;
+  String status = "processing";
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<OrderCubit>(context).getOrders(id: widget.id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,38 +79,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                     InkWell(
                       onTap: () {
                         setState(() {
-                          delivered = true;
-                          cancelled = false;
-                          processing = false;
-                        });
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
-                              color: delivered
-                                  ? Colors.black
-                                  : Colors.transparent),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 15),
-                            child: Text(
-                              "Delivered",
-                              style: delivered
-                                  ? Constants.avgStyle
-                                  : Constants.avgStyleAlt,
-                            ),
-                          )),
-                    ),
-                    const SizedBox(
-                      width: 25,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
                           delivered = false;
-                          cancelled = false;
+                          shipped = false;
                           processing = true;
+                          status = "processing";
                         });
                       },
                       child: Container(
@@ -121,29 +104,59 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                           )),
                     ),
                     const SizedBox(
-                      width: 25,
+                      width: 5,
                     ),
                     InkWell(
                       onTap: () {
                         setState(() {
                           delivered = false;
-                          cancelled = true;
+                          shipped = true;
                           processing = false;
+                          status = "shipped";
                         });
                       },
                       child: Container(
                           decoration: BoxDecoration(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(15)),
-                              color: cancelled
+                              color:
+                                  shipped ? Colors.black : Colors.transparent),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 15),
+                            child: Text(
+                              "Shipped",
+                              style: shipped
+                                  ? Constants.avgStyle
+                                  : Constants.avgStyleAlt,
+                            ),
+                          )),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          delivered = true;
+                          shipped = false;
+                          processing = false;
+                          status = "delivered";
+                        });
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              color: delivered
                                   ? Colors.black
                                   : Colors.transparent),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5.0, horizontal: 15),
                             child: Text(
-                              "Cancelled",
-                              style: cancelled
+                              "Delivered",
+                              style: delivered
                                   ? Constants.avgStyle
                                   : Constants.avgStyleAlt,
                             ),
@@ -155,135 +168,121 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
               const SizedBox(
                 height: 25,
               ),
-              ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              //ORDER NO
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Order No:",
-                                        style: Constants.priceStyleAlt,
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                        "gff23fgfasffasf",
-                                        style: Constants.avgStyleAltBold,
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    "09-09-2021",
-                                    style: Constants.priceStyleAlt,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              //TRACK NO
-                              Row(
-                                children: [
-                                  Text(
-                                    "Tracking No:",
-                                    style: Constants.priceStyleAlt,
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    "gff23fgfasffasf",
-                                    style: Constants.avgStyleAltBold,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              //QUANTITY
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Quantity:",
-                                        style: Constants.priceStyleAlt,
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                        "3",
-                                        style: Constants.avgStyleAltBold,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Total Amount:",
-                                        style: Constants.priceStyleAlt,
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                        "\$125",
-                                        style: Constants.avgStyleAltBold,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              //STATUS
-                              Row(
-                                children: [
-                                  Text(
-                                    "Status:",
-                                    style: Constants.priceStyleAlt,
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  const Text(
-                                    "Delivered",
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+              BlocBuilder<OrderCubit, OrderState>(builder: (context, state) {
+                if (state is OrderLoadedState) {
+                  return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.orders.length,
+                      itemBuilder: (context, index) {
+                        return status == state.orders[index].status
+                            ? OrderWidget(
+                                oid: state.orders[index].oid,
+                                status: state.orders[index].status,
+                                date: state.orders[index].date,
+                                total: state.orders[index].total)
+                            : Container();
+                      });
+                } else {
+                  return buildLoading();
+                }
+              })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OrderWidget extends StatelessWidget {
+  const OrderWidget({
+    Key? key,
+    required this.oid,
+    required this.status,
+    required this.date,
+    required this.total,
+  }) : super(key: key);
+  final String oid, status, date, total;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              //ORDER NO
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Order No:",
+                        style: Constants.priceStyleAlt,
                       ),
-                    );
-                  })
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        oid,
+                        style: Constants.avgStyleAltBold,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    date,
+                    style: Constants.priceStyleAlt,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Row(
+                children: [
+                  Text(
+                    "Total Amount:",
+                    style: Constants.priceStyleAlt,
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "\$$total",
+                    style: Constants.avgStyleAltBold,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              //STATUS
+              Row(
+                children: [
+                  Text(
+                    "Status:",
+                    style: Constants.priceStyleAlt,
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    status,
+                    style: const TextStyle(
+                        color: Colors.orangeAccent,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

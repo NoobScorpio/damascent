@@ -1,5 +1,4 @@
 import 'package:damascent/constants/constants.dart';
-import 'package:damascent/screens/widgets/product_widget.dart';
 import 'package:flutter/material.dart';
 
 class Notifications extends StatefulWidget {

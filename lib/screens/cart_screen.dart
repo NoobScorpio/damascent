@@ -225,7 +225,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Container(
                         width: 1,
                         height: 35,
@@ -233,7 +233,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Container(
                         // width: 75,
                         decoration: BoxDecoration(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:damascent/data_management/models/cart.dart';
+import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/my_user.dart';
 import 'package:damascent/data_management/models/user.dart';
 import 'package:damascent/data_management/repos/user_repo.dart';
@@ -94,9 +96,15 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  logOut() {
+  logOut() async {
     try {
       emit(UserLoadingState());
+      var sp = await SharedPreferences.getInstance();
+      await sp.setString('user', json.encode(MyUser().toJson()));
+      var cart = MyCart();
+      cart.cartItem = [];
+      await sp.setString('cart', json.encode(cart.toJson()));
+
       emit(UserLoadedState(user: MyUser()));
     } on Exception {
       emit(UserErrorState(message: "Could not logout"));

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
@@ -8,6 +10,7 @@ import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -175,7 +178,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 .initializeCart();
                             await BlocProvider.of<ProductCubit>(context)
                                 .getProducts();
-                            push(context, const NavigationScreen());
+                            var sp= await SharedPreferences.getInstance();
+                            MyUser newUser= MyUser.fromJson(json.decode(sp.getString('user')!));
+                            push(context,  NavigationScreen(id:newUser.id! ,));
                           }
                         } else {
                           showToast(

@@ -1,12 +1,15 @@
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/product.dart';
+import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key, required this.product}) : super(key: key);
+  const ProductScreen({Key? key, required this.product, required this.id})
+      : super(key: key);
   final Product product;
+  final String id;
   @override
   _ProductScreenState createState() => _ProductScreenState();
 }
@@ -40,7 +43,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    child: BackButton(),
+                    child: const BackButton(),
                   ),
                 ),
                 Expanded(
@@ -49,18 +52,25 @@ class _ProductScreenState extends State<ProductScreen> {
                   product.pname,
                   style: Constants.avgStyleAltBold,
                 ))),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        "assets/Fav.png",
-                        color: Colors.black,
+                InkWell(
+                  onTap: () async {
+                    showToast("Adding Item", Constants.primaryColor);
+                    await BlocProvider.of<WishlistCubit>(context)
+                        .addWishlistProduct(pid: product.pId, id: widget.id);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.asset(
+                          "assets/Fav.png",
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -210,10 +220,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                         // width: 75,
                                         decoration: BoxDecoration(
                                             color: Colors.grey.shade200,
-                                            borderRadius: BorderRadius.all(
+                                            borderRadius:const BorderRadius.all(
                                                 Radius.circular(8))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                        child:const Padding(
+                                          padding:  EdgeInsets.all(8.0),
                                           child: Icon(Icons.add_shopping_cart),
                                         ),
                                       ),
@@ -230,7 +240,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               ),
             ),
-            SizedBox(
+           const SizedBox(
               height: 30,
             )
           ],

@@ -1,10 +1,14 @@
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
 import 'package:damascent/screens/discount_screen.dart';
+import 'package:damascent/screens/login_screen.dart';
 import 'package:damascent/screens/my_orders.dart';
 import 'package:damascent/screens/personal_info.dart';
 import 'package:damascent/screens/settings_screen.dart';
+import 'package:damascent/state_management/user/user_cubit.dart';
+import 'package:damascent/state_management/user/user_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.user}) : super(key: key);
@@ -23,128 +27,148 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade200,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (context, state) {
+        if (state is UserLoadedState) {
+          return Scaffold(
+            backgroundColor: Colors.grey.shade200,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 25,
                     ),
-                    child: const BackButton(),
-                  ),
-                  Expanded(
-                      child: Center(
-                          child: Text(
-                    "My Profile",
-                    style: Constants.avgStyleAltBold,
-                  ))),
-                  Card(
-                    color: Colors.grey.shade200,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Colors.grey.shade200,
-                        // size: 25,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              //HEADER
-              Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 45,
-                      width: 45,
-                      child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person_outline,
-                            color: Colors.black,
-                          )),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Ali Adam",
-                        style: Constants.avgStyleAltBold,
-                      ),
-                      Text(
-                        "aliadam@gmail.com",
-                        style: Constants.priceStyleAlt,
-                      )
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 25),
-                    child: Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        profileOption("My orders", "Already have 3 orders", () {
-                          push(context, const MyOrdersScreen());
-                        }),
-                        profileOption(
-                            "Personal Information", "Edit your information",
-                            () {
-                          push(
-                              context,
-                              PersonalInformation(
-                                user: user,
-                                checkOut: false,
-                              ));
-                        }),
-                        profileOption(
-                            "Promo codes", "You have special promo codes", () {
-                          push(context, const DiscountScreen());
-                        }),
-                        profileOption("Settings", "Notifications, Passwords",
-                            () {
-                          push(context, SettingsScreen());
-                        }),
+                        Card(
+                          elevation: 1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: const BackButton(),
+                        ),
+                        Expanded(
+                            child: Center(
+                                child: Text(
+                          "My Profile",
+                          style: Constants.avgStyleAltBold,
+                        ))),
+                        Card(
+                          color: Colors.grey.shade200,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.grey.shade200,
+                              // size: 25,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )),
-            ],
-          ),
-        ),
-      ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    //HEADER
+                    Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 45,
+                            width: 45,
+                            child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.person_outline,
+                                  color: Colors.black,
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.user.fName! + " " + state.user.lName!,
+                              style: Constants.avgStyleAltBold,
+                            ),
+                            Text(
+                              state.user.email!,
+                              style: Constants.priceStyleAlt,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 25),
+                          child: Column(
+                            children: [
+                              profileOption(
+                                  "My orders", "Already have 3 orders", () {
+                                push(context,
+                                    MyOrdersScreen(id: state.user.id!));
+                              }),
+                              profileOption("Personal Information",
+                                  "Edit your information", () {
+                                push(
+                                    context,
+                                    PersonalInformation(
+                                      user: state.user,
+                                      checkOut: false,
+                                    ));
+                              }),
+                              profileOption(
+                                  "Promo codes", "You have special promo codes",
+                                  () {
+                                push(context, const DiscountScreen());
+                              }),
+                              profileOption(
+                                  "Settings", "Notifications, Passwords", () {
+                                push(context, const SettingsScreen());
+                              }),
+                              profileOption("Logout", "Logout of damascent",
+                                  () async {
+                                await BlocProvider.of<UserCubit>(context)
+                                    .logOut();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const LoginScreen()),
+                                    (_) => false);
+                              }),
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return buildLoading();
+        }
+      },
     );
   }
 

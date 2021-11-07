@@ -32,7 +32,7 @@ class Product {
     description = json['description'];
     qty = json['qty'];
     keyword = json['keyword'];
-    discount = json['discount'];
+    discount = json['discount'] ?? "";
   }
 
   Map<String, dynamic> toJson() {

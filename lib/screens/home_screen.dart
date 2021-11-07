@@ -1,33 +1,27 @@
 import 'dart:convert';
-
-import 'package:card_swiper/card_swiper.dart';
+import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
-import 'package:damascent/data_management/models/my_user.dart';
 import 'package:damascent/data_management/models/product.dart';
-import 'package:damascent/screens/notifications.dart';
-import 'package:damascent/screens/profile_screen.dart';
+import 'package:damascent/screens/search_screen.dart';
 import 'package:damascent/screens/widgets/product_widget.dart';
-import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';
 import 'package:damascent/state_management/product/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mysql1/mysql1.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen({Key? key, required this.id}) : super(key: key);
+  final String id;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = ScrollController();
-
+  final TextEditingController search = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -61,23 +55,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Search Products",
                 style: Constants.avgStyleAltBold,
               ),
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: TextField(
-                  decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      ),
-                      hintText: "Search our products",
-                      hintStyle: const TextStyle(color: Colors.grey),
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide.none)),
-                ),
-              ),
+              BlocBuilder<ProductCubit, ProductState>(
+                  builder: (context, state) {
+                if (state is ProductLoadedState) {
+                  return SearchProducts(
+                    id: widget.id,
+                    loaded: true,
+                    products: state.products,
+                    search:search
+                  );
+                } else {
+                  return SearchProducts(
+                    id: widget.id,
+                    loaded: false,
+                    products: const [],
+                    search:search
+                  );
+                }
+              }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -111,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: getHeight(context) * 0.39,
                             child: buildLoading());
                       } else {
-                        Future.delayed(const Duration(seconds: 2), () {
+                        Future.delayed(const Duration(milliseconds: 500), () {
                           if (mounted) {
                             _controller.animateTo(100,
                                 duration: const Duration(seconds: 3),
@@ -127,12 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: state.products.length,
                             itemBuilder: (context, index) {
                               return ProductWidgetMain(
-                                product: state.products[index],
-                                name: state.products[index].pname,
-                                desc: state.products[index].description,
-                                image: state.products[index].image1,
-                                price: state.products[index].price,
-                              );
+                                  product: state.products[index],
+                                  name: state.products[index].pname,
+                                  desc: state.products[index].description,
+                                  image: state.products[index].image1,
+                                  price: state.products[index].price,
+                                  id: widget.id);
                             },
                           ),
                         );
@@ -178,27 +173,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state.products == []) {
                         return buildLoading();
                       } else {
-                        return SizedBox(
-                          child: ListView.builder(
-                            itemCount: state.products.length,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: state.products[index].keyword == "hot"
-                                    ? ProductWidgetCard(
+                        return ListView.builder(
+                          itemCount: state.products.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return state.products[index].keyword == "hot"
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: ProductWidgetCard(
                                         product: state.products[index],
                                         name: state.products[index].pname,
                                         discount:
                                             state.products[index].discount,
                                         price: state.products[index].price,
                                         image: state.products[index].image1,
-                                      )
-                                    : const SizedBox(),
-                              );
-                            },
-                          ),
+                                        id: widget.id),
+                                  )
+                                : Container();
+                          },
                         );
                       }
                     } else if (state is ProductErrorState) {
@@ -214,14 +207,59 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var response = await http.get(Uri.parse(baseURL + "/promo.php"));
-          var promos = json.decode(response.body)['records'];
-          for (var promo in promos) {
-            print(promo);
-          }
-        },
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () async {
+      //     var response = await http.get(Uri.parse(baseURL + "/promo.php"));
+      //     var promos = json.decode(response.body)['records'];
+      //     for (var promo in promos) {
+      //       print(promo);
+      //     }
+      //   },
+      // ),
+    );
+  }
+}
+
+class SearchProducts extends StatelessWidget {
+  const SearchProducts({
+    Key? key,
+    required this.id,
+    required this.products,
+    required this.loaded,
+    required this.search,
+  }) : super(key: key);
+  final String id;
+  final List<Product> products;
+  final bool loaded;
+  final TextEditingController search;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: TextField(
+        controller: search,
+        decoration: InputDecoration(
+            suffixIcon: InkWell(
+              onTap: () {
+                if (loaded) {
+                  push(context,
+                      SearchScreen(products: products, id: id, search: search.text));
+                } else {
+                  showToast("Products not loaded", Colors.red);
+                }
+              },
+              child: const Icon(
+                Icons.search,
+                color: Colors.grey,
+              ),
+            ),
+            hintText: "Search our products",
+            hintStyle: const TextStyle(color: Colors.grey),
+            fillColor: Colors.white,
+            filled: true,
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                borderSide: BorderSide.none)),
       ),
     );
   }

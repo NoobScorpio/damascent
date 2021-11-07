@@ -2,25 +2,32 @@ import 'package:damascent/screens/cart_screen.dart';
 import 'package:damascent/screens/home_screen.dart';
 import 'package:damascent/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({Key? key}) : super(key: key);
-
+  const NavigationScreen({Key? key, required this.id}) : super(key: key);
+  final String id;
   @override
   _NavigationScreenState createState() => _NavigationScreenState();
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    CartScreen(),
-    WishlistScreen(),
-  ];
+  late List<Widget> _widgetOptions;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+       HomeScreen(id: widget.id),
+      const CartScreen(),
+      WishlistScreen(id: widget.id),
+    ];
   }
 
   @override
