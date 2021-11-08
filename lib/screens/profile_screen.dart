@@ -100,11 +100,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              state.user.fName! + " " + state.user.lName!,
+                              state.user.fName ??
+                                  "" " " + (state.user.lName ?? ""),
                               style: Constants.avgStyleAltBold,
                             ),
                             Text(
-                              state.user.email!,
+                              state.user.email ?? "",
                               style: Constants.priceStyleAlt,
                             )
                           ],
@@ -127,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               profileOption(
                                   "My orders", "Already have 3 orders", () {
                                 push(context,
-                                    MyOrdersScreen(id: state.user.id!));
+                                    MyOrdersScreen(id: state.user.id ?? ""));
                               }),
                               profileOption("Personal Information",
                                   "Edit your information", () {

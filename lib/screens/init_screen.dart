@@ -27,7 +27,10 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       if (state is UserLoadedState) {
-        return  NavigationScreen(id:state.user.id!);
+        if (state.user.id == "" || state.user.id == null) {
+          return const LoginScreen();
+        }
+        return NavigationScreen(id: state.user.id ?? "");
       } else {
         return const LoginScreen();
       }
