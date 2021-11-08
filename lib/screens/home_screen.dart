@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/product.dart';
+import 'package:damascent/screens/discover_screen.dart';
 import 'package:damascent/screens/search_screen.dart';
 import 'package:damascent/screens/widgets/product_widget.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';
@@ -59,33 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, state) {
                 if (state is ProductLoadedState) {
                   return SearchProducts(
-                    id: widget.id,
-                    loaded: true,
-                    products: state.products,
-                    search:search
-                  );
+                      id: widget.id,
+                      loaded: true,
+                      products: state.products,
+                      search: search);
                 } else {
                   return SearchProducts(
-                    id: widget.id,
-                    loaded: false,
-                    products: const [],
-                    search:search
-                  );
+                      id: widget.id,
+                      loaded: false,
+                      products: const [],
+                      search: search);
                 }
               }),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Discover Scents",
-                    style: Constants.avgStyleAltBold,
-                  ),
-                  const Icon(Icons.arrow_forward),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
               SizedBox(
                 width: double.maxFinite,
                 // height: 400,
@@ -113,23 +99,78 @@ class _HomeScreenState extends State<HomeScreen> {
                                 curve: Curves.fastOutSlowIn);
                           }
                         });
-                        return SizedBox(
-                          width: getWidth(context),
-                          height: getHeight(context) * 0.39,
-                          child: ListView.builder(
-                            controller: _controller,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.products.length,
-                            itemBuilder: (context, index) {
-                              return ProductWidgetMain(
-                                  product: state.products[index],
-                                  name: state.products[index].pname,
-                                  desc: state.products[index].description,
-                                  image: state.products[index].image1,
-                                  price: state.products[index].price,
-                                  id: widget.id);
-                            },
-                          ),
+                        return Column(
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                List<Widget> widgets = [];
+                                // for (Product prod in state.products) {
+                                // widgets.add(DiscoverProductWidget(
+                                //   name: prod.pname,
+                                //   desc: prod.description,
+                                //   price: prod.price,
+                                //   image: prod.image1,
+                                //   product: prod,
+                                //   id: widget.id));
+
+                                // }
+                                for (int i = 0; i <= 20; i++) {
+                                  widgets.add(DiscoverProductWidget(
+                                      name: "Eight ",
+                                      desc:
+                                          "EIGHT & BOB by EIGHT & BOB is a Aromatic fragrance for men."
+                                          "EIGHT & BOB was launched in 2012. ",
+                                      price: "200",
+                                      image:
+                                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                                      // product: Product(),
+                                      id: widget.id));
+                                }
+                                push(
+                                    context,
+                                    DiscoverScreen(
+                                        products: widgets,
+                                        id: widget.id,
+                                        title: "Discover"));
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Discover Scents",
+                                    style: Constants.avgStyleAltBold,
+                                  ),
+                                  const Icon(Icons.arrow_forward),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              width: getWidth(context),
+                              height: getHeight(context) * 0.39,
+                              child: ListView.builder(
+                                controller: _controller,
+                                scrollDirection: Axis.horizontal,
+                                // itemCount: state.products.length,
+                                itemCount: 10,
+                                itemBuilder: (context, index) {
+                                  return ProductWidgetMain(
+                                      product: state.products[0],
+                                      name: state.products[0].pname,
+                                      desc: state.products[0].description,
+                                      image: state.products[0].image1,
+                                      price: state.products[0].price,
+                                      id: widget.id);
+                                },
+                              ),
+                            ),
+                          ],
                         );
                       }
                     } else if (state is ProductErrorState) {
@@ -149,16 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 25,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Hot Deals",
-                    style: Constants.avgStyleAltBold,
-                  ),
-                  const Icon(Icons.arrow_forward),
-                ],
-              ),
               SizedBox(
                 width: double.maxFinite,
                 // height: 400,
@@ -173,25 +204,76 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state.products == []) {
                         return buildLoading();
                       } else {
-                        return ListView.builder(
-                          itemCount: state.products.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return state.products[index].keyword == "hot"
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: ProductWidgetCard(
-                                        product: state.products[index],
-                                        name: state.products[index].pname,
-                                        discount:
-                                            state.products[index].discount,
-                                        price: state.products[index].price,
-                                        image: state.products[index].image1,
-                                        id: widget.id),
-                                  )
-                                : Container();
-                          },
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                List<Widget> widgets = [];
+                                // for (Product prod in state.products) {
+                                // widgets.add(DiscoverProductWidget(
+                                //   name: prod.pname,
+                                //   desc: prod.description,
+                                //   price: prod.price,
+                                //   image: prod.image1,
+                                //   product: prod,
+                                //   id: widget.id));
+
+                                // }
+                                for (int i = 0; i <= 20; i++) {
+                                  widgets.add(DiscoverProductWidget(
+                                      name: "Eight ",
+                                      desc:
+                                          "EIGHT & BOB by EIGHT & BOB is a Aromatic fragrance for men."
+                                          "EIGHT & BOB was launched in 2012. ",
+                                      price: "200",
+                                      image:
+                                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                                      // product: Product(),
+                                      id: widget.id));
+                                }
+                                push(
+                                    context,
+                                    DiscoverScreen(
+                                        products: widgets,
+                                        id: widget.id,
+                                        title: "Hot"));
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Hot Deals",
+                                    style: Constants.avgStyleAltBold,
+                                  ),
+                                  const Icon(Icons.arrow_forward),
+                                ],
+                              ),
+                            ),
+                            ListView.builder(
+                              // itemCount: state.products.length,
+                              itemCount: 10,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return
+                                    // state.products[index].keyword == "hot"
+                                    // ?
+                                    Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: ProductWidgetCard(
+                                      product: state.products[0],
+                                      name: state.products[0].pname,
+                                      discount: state.products[0].discount,
+                                      price: state.products[0].price,
+                                      image: state.products[0].image1,
+                                      id: widget.id),
+                                )
+                                    // : Container()
+                                    ;
+                              },
+                            ),
+                          ],
                         );
                       }
                     } else if (state is ProductErrorState) {
@@ -242,8 +324,10 @@ class SearchProducts extends StatelessWidget {
             suffixIcon: InkWell(
               onTap: () {
                 if (loaded) {
-                  push(context,
-                      SearchScreen(products: products, id: id, search: search.text));
+                  push(
+                      context,
+                      SearchScreen(
+                          products: products, id: id, search: search.text));
                 } else {
                   showToast("Products not loaded", Colors.red);
                 }

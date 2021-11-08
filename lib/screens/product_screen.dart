@@ -83,19 +83,20 @@ class _ProductScreenState extends State<ProductScreen> {
             Center(
               child: Stack(
                 children: [
-                  Positioned(
-                    bottom: 50,
-                    left: 0,
-                    right: 0,
-                    child: Image.asset(
-                      "assets/base.png",
-                      scale: 0.9,
-                    ),
-                  ),
+                  // Positioned(
+                  //   bottom: 50,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: Image.asset(
+                  //     "assets/base.png",
+                  //     scale: 0.9,
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Image.network(
-                      "$imageURL/${product.image1}",
+                      // "$imageURL/${product.image1}",
+                      "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
                     ),
                   ),
                 ],
@@ -167,14 +168,14 @@ class _ProductScreenState extends State<ProductScreen> {
                         "\$${product.price}",
                         style: Constants.priceStyleAlt,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Text(
                         "Description",
                         style: Constants.avgStyleAltBold,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Text(
@@ -189,7 +190,7 @@ class _ProductScreenState extends State<ProductScreen> {
                             addToCart(product: product, context: context);
                           },
                           child: SizedBox(
-                            width: 215,
+                            width: 180,
                             child: Card(
                               color: Colors.black,
                               shape: RoundedRectangleBorder(
@@ -214,18 +215,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                       height: 35,
                                       color: Colors.white,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        // width: 75,
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            borderRadius:const BorderRadius.all(
-                                                Radius.circular(8))),
-                                        child:const Padding(
-                                          padding:  EdgeInsets.all(8.0),
-                                          child: Icon(Icons.add_shopping_cart),
-                                        ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.add_shopping_cart,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ],
@@ -240,7 +234,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 ),
               ),
             ),
-           const SizedBox(
+            const SizedBox(
               height: 30,
             )
           ],

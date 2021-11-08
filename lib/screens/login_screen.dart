@@ -23,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController email = TextEditingController(),
       pass = TextEditingController();
-
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,14 +64,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 100,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: getTextField(email, 'Email', Icons.email),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: getTextField(pass, 'Password', Icons.lock_outline),
-                  ),
+                  Form(
+                    key:formKey,
+                      child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: getTextField(email, 'Email', Icons.email,
+                            TextInputType.emailAddress, (val) {
+                          Pattern pattern =
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)'
+                              r'|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]'
+                              r'{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regex = RegExp(pattern.toString());
+                          if (regex
+                              .hasMatch(val.trim().toString().toLowerCase())) {
+                            return null;
+                          } else {
+                            return 'Enter a valid Email';
+                          }
+                        }, false),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: getTextField(
+                            pass,
+                            'Password',
+                            Icons.lock_outline,
+                            TextInputType.visiblePassword,
+                            (val) {},
+                            false),
+                      ),
+                    ],
+                  )),
                   const SizedBox(
                     height: 15,
                   ),
@@ -90,23 +115,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        showToast("Logging in", Constants.primaryColor);
-                        if (email.text != "" && pass.text != "") {
-                          bool loggedIn =
-                              await BlocProvider.of<UserCubit>(context)
-                                  .loginUser(email.text, pass.text);
-                          if (loggedIn) {
-                            showToast("Success", Colors.green);
-                            await BlocProvider.of<CartCubit>(context)
-                                .initializeCart();
-                            await BlocProvider.of<ProductCubit>(context)
-                                .getProducts();
-                                var sp= await SharedPreferences.getInstance();
-                            MyUser newUser= MyUser.fromJson(json.decode(sp.getString('user')!));
-                            push(context,  NavigationScreen(id: newUser.id!,));
+                        if (formKey.currentState!.validate()) {
+                          showToast("Logging in", Constants.primaryColor);
+                          if (email.text != "" && pass.text != "") {
+                            bool loggedIn =
+                                await BlocProvider.of<UserCubit>(context)
+                                    .loginUser(email.text, pass.text);
+                            if (loggedIn) {
+                              showToast("Success", Colors.green);
+                              await BlocProvider.of<CartCubit>(context)
+                                  .initializeCart();
+                              await BlocProvider.of<ProductCubit>(context)
+                                  .getProducts();
+                              var sp = await SharedPreferences.getInstance();
+                              MyUser newUser = MyUser.fromJson(
+                                  json.decode(sp.getString('user')!));
+                              push(
+                                  context,
+                                  NavigationScreen(
+                                    id: newUser.id!,
+                                  ));
+                            }
+                          } else {
+                            showToast("Please fill all fields", Colors.red);
                           }
-                        } else {
-                          showToast("Please fill all fields", Colors.red);
                         }
                       },
                       child: const Text('Login',

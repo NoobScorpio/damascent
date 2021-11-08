@@ -8,7 +8,6 @@ import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductWidgetMain extends StatelessWidget {
   const ProductWidgetMain(
@@ -40,18 +39,19 @@ class ProductWidgetMain extends StatelessWidget {
                 ),
                 elevation: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
-                        style: Constants.avgStyleAlt,
+                        // name,
+                        "Eight & Bob",
+                        style: Constants.avgStyleAltBold,
                       ),
-                      // SizedBox(
-                      //   height: 5,
-                      // ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       // RatingBar(
                       //   initialRating: 5.0,
                       //   minRating: 0,
@@ -82,20 +82,34 @@ class ProductWidgetMain extends StatelessWidget {
                       // ),
 
                       Text(
-                        desc,
-                        style: Constants.avgStyleAlt,
+                        // desc,
+                        "EIGHT & BOB is a Aromatic fragrance for elegence",
+                        style: Constants.smallStyleAlt,
                         overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Text(
-                        "\$$price",
-                        style: Constants.priceStyleAlt,
+                        maxLines: 2,
                       ),
                       const SizedBox(
                         height: 5,
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "\$$price",
+                            style: Constants.priceStyleAlt,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              "assets/Fav.png",
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
                     ],
                   ),
                 ),
@@ -104,12 +118,13 @@ class ProductWidgetMain extends StatelessWidget {
           ),
           Positioned(
             top: -5,
-            left: 10,
+            left: 5,
             child: SizedBox(
-              height: 225,
+              height: 220,
               child: Image.network(
-                "$imageURL/$image",
-                // scale: 2,
+                // "$imageURL/$image",
+                "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                scale: 2,
               ),
             ),
           ),
@@ -163,7 +178,8 @@ class ProductWidgetCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Image.network(
-                      "$imageURL/$image",
+                      // "$imageURL/$image",
+                      "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
                       scale: 1.5,
                     ),
                   ),
@@ -178,8 +194,9 @@ class ProductWidgetCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
-                        style: Constants.avgStyleAlt,
+                        // name,
+                        "Eight & Bob",
+                        style: Constants.avgStyleAltBold,
                       ),
                       Row(
                         children: [
@@ -189,13 +206,6 @@ class ProductWidgetCard extends StatelessWidget {
                                 color: Colors.orange,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "\$$price",
-                            style: Constants.priceStyleAlt,
                           ),
                         ],
                       )
@@ -361,7 +371,7 @@ class ProductWidgetCart extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
+        child: SizedBox(
           height: 140,
           child: Card(
             elevation: 0,
@@ -379,11 +389,13 @@ class ProductWidgetCart extends StatelessWidget {
                       width: 100,
                       decoration: BoxDecoration(
                           color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Image.network(
-                          "$imageURL/${product.image1}",
+                          // "$imageURL/${product.image1}",
+                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
                         ),
                       ),
                     ),
@@ -400,12 +412,13 @@ class ProductWidgetCart extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product.pname,
+                                // product.pname,
+                                "Eight & Bob",
                                 style: Constants.avgStyleAltBold,
                               ),
                               Text(
                                 product.keyword,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400),
@@ -417,7 +430,7 @@ class ProductWidgetCart extends StatelessWidget {
                             children: [
                               Text(
                                 "\$${product.price}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.orange,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400),
@@ -427,8 +440,8 @@ class ProductWidgetCart extends StatelessWidget {
                                 height: 40,
                                 decoration: BoxDecoration(
                                     color: Colors.grey.shade200,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8))),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8))),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
@@ -549,7 +562,8 @@ class ProductWishlistCard extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Image.network(
-                          "$imageURL/${product.image1}",
+                          // "$imageURL/${product.image1}",
+                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
                           // scale: 2.5,
                         ),
                       ),
@@ -567,7 +581,8 @@ class ProductWishlistCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product.pname,
+                                // product.pname,
+                                "Eight & Bob",
                                 style: Constants.avgStyleAltBold,
                               ),
                               Text(
@@ -593,27 +608,27 @@ class ProductWishlistCard extends StatelessWidget {
                             height: 15,
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  addToCart(product: product, context: context);
-                                },
-                                child: Container(
-                                  // width: 75,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(8))),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(
-                                      Icons.shopping_cart,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // InkWell(
+                              //   onTap: () {
+                              //     addToCart(product: product, context: context);
+                              //   },
+                              //   child: Container(
+                              //     // width: 75,
+                              //     decoration: BoxDecoration(
+                              //         color: Colors.grey.shade200,
+                              //         borderRadius: const BorderRadius.all(
+                              //             Radius.circular(8))),
+                              //     child: const Padding(
+                              //       padding: EdgeInsets.all(8.0),
+                              //       child: Icon(
+                              //         Icons.shopping_cart_outlined,
+                              //         color: Colors.black,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               InkWell(
                                 onTap: () async {
                                   showToast(
@@ -631,7 +646,7 @@ class ProductWishlistCard extends StatelessWidget {
                                   child: const Padding(
                                     padding: EdgeInsets.all(8.0),
                                     child: Icon(
-                                      Icons.delete,
+                                      Icons.delete_outline,
                                       color: Colors.black,
                                     ),
                                   ),
@@ -648,6 +663,108 @@ class ProductWishlistCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DiscoverProductWidget extends StatelessWidget {
+  const DiscoverProductWidget(
+      {Key? key,
+      required this.name,
+      required this.desc,
+      required this.price,
+      required this.image,
+      // required this.product,
+      required this.id})
+      : super(key: key);
+  final String name, desc, price, image, id;
+  // final Product product;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // push(context, ProductScreen(product: product, id: id));
+      },
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // const SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: Text(
+                        // name,
+                        "Eight & Bob",
+                        style: Constants.avgStyleAltBold,
+                      ),
+                    ),
+
+                    Text(
+                      "Hot",
+                      style: Constants.smallStyleAlt,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "\$$price",
+                          style: Constants.priceStyleAlt,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(12)),
+                                color: Colors.grey[200]),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.shopping_cart_outlined,
+                                color: Colors.black,
+                                size: 22,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // const SizedBox(
+                    //   height: 5,
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: -5,
+            left: 0,
+            right: 0,
+            child: SizedBox(
+              height: 100,
+              child: Image.network(
+                // "$imageURL/$image",
+                "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                scale: 7,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

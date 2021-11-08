@@ -41,12 +41,21 @@ Widget getHeader({context, required bool back, required text}) {
             ),
           ),
         ),
-      Expanded(
-          child: Center(
-              child: Text(
-        text,
-        style: Constants.bigStyleAlt,
-      ))),
+      if (text != "Home")
+        Expanded(
+            child: Center(
+                child: Text(
+          text,
+          style: Constants.bigStyleAlt,
+        ))),
+      if (text == "Home")
+        Expanded(
+            child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Image.asset("assets/black_logo.png"),
+          ),
+        )),
       BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           if (state is UserLoadedState) {
@@ -143,27 +152,53 @@ Widget getPasswordField(cont, text, obs) {
   );
 }
 
-Widget getTextField(controller, text, icon) {
-  return TextField(
-    controller: controller,
-    style: const TextStyle(color: Colors.grey),
-    cursorColor: Colors.white,
-    obscureText: text == 'Password' ? true : false,
-    decoration: InputDecoration(
-      hintText: text,
-      hintStyle: const TextStyle(color: Colors.grey),
-      prefixIcon: Icon(
-        icon,
-        color: Colors.grey,
-      ),
-      enabledBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.cyan),
-      ),
-      focusedBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.cyan),
-      ),
-    ),
-  );
+Widget getTextField(controller, text, icon, input, validator, length) {
+  return length
+      ? TextFormField(
+          controller: controller,
+          style: const TextStyle(color: Colors.grey),
+          cursorColor: Colors.white,
+          maxLength: 12,
+          obscureText: text == 'Password' ? true : false,
+          keyboardType: input,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: text,
+            hintStyle: const TextStyle(color: Colors.grey),
+            prefixIcon: Icon(
+              icon,
+              color: Colors.grey,
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+          ),
+        )
+      : TextFormField(
+          controller: controller,
+          style: const TextStyle(color: Colors.grey),
+          cursorColor: Colors.white,
+          obscureText: text == 'Password' ? true : false,
+          keyboardType: input,
+          validator: validator,
+          decoration: InputDecoration(
+            hintText: text,
+            hintStyle: const TextStyle(color: Colors.grey),
+            prefixIcon: Icon(
+              icon,
+              color: Colors.grey,
+            ),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.cyan),
+            ),
+          ),
+        );
 }
 
 Widget buildLoading() {
@@ -227,11 +262,11 @@ class Constants {
   static TextStyle smallStyle = const TextStyle(
       color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400);
   static TextStyle smallStyleAlt = const TextStyle(
-      color: Colors.black, fontSize: 12, fontWeight: FontWeight.w400);
+      color: Colors.black54, fontSize: 12, fontWeight: FontWeight.w400);
   static TextStyle avgStyleAlt = const TextStyle(
       color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400);
   static TextStyle avgStyleAltBold = const TextStyle(
-      color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600);
+      color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle avgStyleBold = const TextStyle(
       color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600);
   static TextStyle avgStyle = const TextStyle(

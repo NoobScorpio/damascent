@@ -121,8 +121,10 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                               activeColor: Constants.primaryColor,
                               value: 0,
                               groupValue: group,
-                              onChanged: (val) =>
-                                  setState(() => group = val as int),
+                              onChanged: (val) {
+                                setState(() => group = val as int);
+                                Navigator.pop(context, 0);
+                              },
                             ),
                           ],
                         ),
@@ -172,8 +174,10 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                               activeColor: Constants.primaryColor,
                               value: 1,
                               groupValue: group,
-                              onChanged: (val) =>
-                                  setState(() => group = val as int),
+                              onChanged: (val) {
+                                setState(() => group = val as int);
+                                Navigator.pop(context, 1);
+                              },
                             ),
                           ],
                         ),
@@ -224,8 +228,10 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                               activeColor: Constants.primaryColor,
                               value: 2,
                               groupValue: group,
-                              onChanged: (val) =>
-                                  setState(() => group = val as int),
+                              onChanged: (val) {
+                                setState(() => group = val as int);
+                                Navigator.pop(context, 2);
+                              },
                             ),
                           ],
                         ),
