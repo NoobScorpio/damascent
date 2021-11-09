@@ -28,11 +28,11 @@ class _InitScreenState extends State<InitScreen> {
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       if (state is UserLoadedState) {
         if (state.user.id == "" || state.user.id == null) {
-          return const LoginScreen();
+          return const NavigationScreen(id: "");
         }
         return NavigationScreen(id: state.user.id ?? "");
       } else {
-        return const LoginScreen();
+        return const NavigationScreen(id: "");
       }
     });
   }

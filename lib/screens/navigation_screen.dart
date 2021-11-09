@@ -1,6 +1,8 @@
 import 'package:damascent/screens/cart_screen.dart';
 import 'package:damascent/screens/home_screen.dart';
 import 'package:damascent/screens/wishlist_screen.dart';
+import 'package:damascent/state_management/user/user_cubit.dart';
+import 'package:damascent/state_management/user/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,9 +26,18 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
     _widgetOptions = <Widget>[
-       HomeScreen(id: widget.id),
+      HomeScreen(id: widget.id),
       const CartScreen(),
-      WishlistScreen(id: widget.id),
+      BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+        if (state is UserLoadedState) {
+          if (state.user.id == "" || state.user.id == null) {
+            return const WishlistScreen(id: "");
+          }
+          return WishlistScreen(id: state.user.id ?? "");
+        } else {
+          return const WishlistScreen(id: "");
+        }
+      }),
     ];
   }
 

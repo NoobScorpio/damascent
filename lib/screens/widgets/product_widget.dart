@@ -2,8 +2,11 @@ import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/product.dart';
+import 'package:damascent/screens/login_screen.dart';
 import 'package:damascent/screens/product_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
+import 'package:damascent/state_management/user/user_cubit.dart';
+import 'package:damascent/state_management/user/user_state.dart';
 import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -98,13 +101,39 @@ class ProductWidgetMain extends StatelessWidget {
                             "\$$price",
                             style: Constants.priceStyleAlt,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              "assets/Fav.png",
-                              color: Colors.black,
-                            ),
-                          ),
+                          BlocBuilder<UserCubit, UserState>(
+                              builder: (context, ustate) {
+                            return InkWell(
+                              onTap: () async {
+                                if (ustate is UserLoadedState) {
+                                  if (ustate.user.id == "" ||
+                                      ustate.user.id == null) {
+                                    showToast("Not logged in", Colors.red);
+                                    push(context,
+                                        const LoginScreen(other: true));
+                                  } else {
+                                    showToast(
+                                        "Adding Item", Constants.primaryColor);
+                                    await BlocProvider.of<WishlistCubit>(
+                                            context)
+                                        .addWishlistProduct(
+                                            pid: product.pId,
+                                            id: ustate.user.id!);
+                                  }
+                                } else {
+                                  showToast("Not logged in", Colors.red);
+                                  push(context, const LoginScreen(other: true));
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  "assets/Fav.png",
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                          }),
                         ],
                       ),
                       // const SizedBox(
@@ -724,19 +753,24 @@ class DiscoverProductWidget extends StatelessWidget {
                           "\$$price",
                           style: Constants.priceStyleAlt,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(12)),
-                                color: Colors.grey[200]),
-                            child: const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.shopping_cart_outlined,
-                                color: Colors.black,
-                                size: 22,
+                        InkWell(
+                          onTap: () {
+                            // addToCart(product: product, context: context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12)),
+                                  color: Colors.grey[200]),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.shopping_cart_outlined,
+                                  color: Colors.black,
+                                  size: 22,
+                                ),
                               ),
                             ),
                           ),

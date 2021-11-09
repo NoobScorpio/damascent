@@ -1,6 +1,9 @@
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/product.dart';
+import 'package:damascent/screens/login_screen.dart';
+import 'package:damascent/state_management/user/user_cubit.dart';
+import 'package:damascent/state_management/user/user_state.dart';
 import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,29 +55,42 @@ class _ProductScreenState extends State<ProductScreen> {
                   product.pname,
                   style: Constants.avgStyleAltBold,
                 ))),
-                InkWell(
-                  onTap: () async {
-                    showToast("Adding Item", Constants.primaryColor);
-                    await BlocProvider.of<WishlistCubit>(context)
-                        .addWishlistProduct(pid: product.pId, id: widget.id);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          "assets/Fav.png",
-                          color: Colors.black,
+                BlocBuilder<UserCubit, UserState>(builder: (context, ustate) {
+                  return InkWell(
+                    onTap: () async {
+                      if (ustate is UserLoadedState) {
+                        if (ustate.user.id == "" || ustate.user.id == null) {
+                          showToast("Not logged in", Colors.red);
+                          push(context, const LoginScreen(other: true));
+                        } else {
+                          showToast("Adding Item", Constants.primaryColor);
+                          await BlocProvider.of<WishlistCubit>(context)
+                              .addWishlistProduct(
+                                  pid: product.pId, id: ustate.user.id!);
+                        }
+                      } else {
+                        showToast("Not logged in", Colors.red);
+                        push(context, const LoginScreen(other: true));
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            "assets/Fav.png",
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
             const SizedBox(

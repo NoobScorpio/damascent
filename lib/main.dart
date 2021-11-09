@@ -1,7 +1,6 @@
 import 'package:damascent/data_management/repos/cart_repo.dart';
 import 'package:damascent/data_management/repos/product_repo.dart';
-import 'package:damascent/screens/init_screen.dart';
-import 'package:damascent/screens/login_screen.dart';
+import 'package:damascent/screens/splash_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/order/order_cubit.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';
@@ -45,18 +44,16 @@ class MyApp extends StatelessWidget {
         title: Constants.appName,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          // primaryColor: primaryColor,
           textTheme: GoogleFonts.montserratTextTheme(
             Theme.of(context).textTheme,
           ),
         ),
         builder: (context, child) => MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              //TODO: CHANGE TO 1
               textScaleFactor: 1,
             ),
             child: child!),
-        home: const InitScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

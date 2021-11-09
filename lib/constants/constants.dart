@@ -59,6 +59,31 @@ Widget getHeader({context, required bool back, required text}) {
       BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           if (state is UserLoadedState) {
+            if (state.user.id == "" || state.user.id == null) {
+              return InkWell(
+                onTap: () {
+                  push(
+                      context,
+                      const LoginScreen(
+                        other: true,
+                      ));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 45,
+                    width: 45,
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person_outline,
+                          color: Colors.black,
+                        )),
+                  ),
+                ),
+              );
+            }
+
             return InkWell(
               onTap: () {
                 push(
@@ -84,7 +109,11 @@ Widget getHeader({context, required bool back, required text}) {
           } else {
             return InkWell(
               onTap: () {
-                push(context, const LoginScreen());
+                push(
+                    context,
+                    const LoginScreen(
+                      other: true,
+                    ));
               },
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -159,7 +188,11 @@ Widget getTextField(controller, text, icon, input, validator, length) {
           style: const TextStyle(color: Colors.grey),
           cursorColor: Colors.white,
           maxLength: 12,
-          obscureText: text == 'Password' ? true : false,
+          obscureText: (text == 'Password' ||
+                  text == 'New Password' ||
+                  text == 'Confirm Password')
+              ? true
+              : false,
           keyboardType: input,
           validator: validator,
           decoration: InputDecoration(
@@ -181,7 +214,11 @@ Widget getTextField(controller, text, icon, input, validator, length) {
           controller: controller,
           style: const TextStyle(color: Colors.grey),
           cursorColor: Colors.white,
-          obscureText: text == 'Password' ? true : false,
+          obscureText: (text == 'Password' ||
+                  text == 'New Password' ||
+                  text == 'Confirm Password')
+              ? true
+              : false,
           keyboardType: input,
           validator: validator,
           decoration: InputDecoration(

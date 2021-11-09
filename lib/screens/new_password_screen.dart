@@ -1,28 +1,25 @@
 import 'dart:convert';
-
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
-import 'package:damascent/screens/forget_password_screen.dart';
 import 'package:damascent/screens/navigation_screen.dart';
-import 'package:damascent/screens/signup_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key, required this.other}) : super(key: key);
-  final bool other;
+class NewPasswordScreen extends StatefulWidget {
+  const NewPasswordScreen({Key? key}) : super(key: key);
+
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<NewPasswordScreen> createState() => _NewPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email = TextEditingController(),
+class _NewPasswordScreenState extends State<NewPasswordScreen> {
+  TextEditingController pass2 = TextEditingController(),
       pass = TextEditingController();
   final formKey = GlobalKey<FormState>();
   @override
@@ -54,26 +51,42 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.12,
                   ),
-                  if (widget.other)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: BackButton(
-                          color: Colors.white,
-                        ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: BackButton(
+                        color: Colors.white,
                       ),
                     ),
-                  Image.asset("assets/white_logo.png"),
+                  ),
+                  Center(
+                    child: SvgPicture.asset(
+                      "assets/forget.svg",
+                      semanticsLabel: 'Acme Logo',
+                      height: 150,
+                    ),
+                  ),
                   const SizedBox(
                     height: 25,
                   ),
                   Text(
-                    "Login",
+                    "New Password",
                     style: Constants.bigStyle,
                   ),
                   const SizedBox(
-                    height: 100,
+                    height: 25,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Text(
+                      "Enter your verification code below and enter your new password",
+                      style: Constants.smallStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
                   ),
                   Form(
                       key: formKey,
@@ -81,51 +94,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 50),
-                            child: getTextField(email, 'Email', Icons.email,
-                                TextInputType.emailAddress, (val) {
-                              Pattern pattern =
-                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)'
-                                  r'|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]'
-                                  r'{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                              RegExp regex = RegExp(pattern.toString());
-                              if (regex.hasMatch(
-                                  val.trim().toString().toLowerCase())) {
-                                return null;
+                            child: getTextField(
+                                pass,
+                                'New Password',
+                                Icons.lock_outline,
+                                TextInputType.visiblePassword, (val) {
+                              if (val.toString().length <= 5) {
+                                return 'Password should be atleast 6 characters';
                               } else {
-                                return 'Enter a valid Email';
+                                return null;
                               }
                             }, false),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 50),
                             child: getTextField(
-                                pass,
-                                'Password',
+                                pass2,
+                                'Confirm Password',
                                 Icons.lock_outline,
-                                TextInputType.visiblePassword,
-                                (val) {},
-                                false),
+                                TextInputType.visiblePassword, (val) {
+                              if (val == pass.text) {
+                                return null;
+                              } else {
+                                return 'Passwords do not match';
+                              }
+                            }, false),
                           ),
                         ],
                       )),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      push(context, ForgetPasswordScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 50.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "Forgot your password?",
-                          style: Constants.smallStyle,
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 50,
                   ),
@@ -133,32 +129,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           showToast("Logging in", Constants.primaryColor);
-                          if (email.text != "" && pass.text != "") {
+                          if (pass2.text != "" && pass.text != "") {
                             bool loggedIn =
                                 await BlocProvider.of<UserCubit>(context)
-                                    .loginUser(email.text, pass.text);
+                                    .loginUser(pass2.text, pass.text);
                             if (loggedIn) {
                               showToast("Success", Colors.green);
-
-                              if (widget.other) {
-                                pop(context);
-                              } else {
-                                var sp = await SharedPreferences.getInstance();
-                                MyUser newUser = MyUser.fromJson(
-                                    json.decode(sp.getString('user')!));
-                                push(
-                                    context,
-                                    NavigationScreen(
-                                      id: newUser.id!,
-                                    ));
-                              }
+                              await BlocProvider.of<CartCubit>(context)
+                                  .initializeCart();
+                              await BlocProvider.of<ProductCubit>(context)
+                                  .getProducts();
+                              var sp = await SharedPreferences.getInstance();
+                              MyUser newUser = MyUser.fromJson(
+                                  json.decode(sp.getString('user')!));
+                              push(
+                                  context,
+                                  NavigationScreen(
+                                    id: newUser.id!,
+                                  ));
                             }
                           } else {
                             showToast("Please fill all fields", Colors.red);
                           }
                         }
                       },
-                      child: const Text('Login',
+                      child: const Text('Confirm',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
@@ -171,19 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 vertical: 12, horizontal: 150)),
                       )),
                   const SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      push(context,  SignUpScreen(other:widget.other));
-                    },
-                    child: Text(
-                      "Do not have an account? Sign up here?",
-                      style: Constants.smallStyle,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
+                    height: 30,
                   ),
                 ],
               ),

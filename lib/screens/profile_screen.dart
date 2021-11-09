@@ -1,3 +1,4 @@
+import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
 import 'package:damascent/screens/discount_screen.dart';
@@ -139,11 +140,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       checkOut: false,
                                     ));
                               }),
-                              profileOption(
-                                  "Promo codes", "You have special promo codes",
-                                  () {
-                                push(context, const DiscountScreen());
-                              }),
+                              // profileOption(
+                              //     "Promo codes", "You have special promo codes",
+                              //     () {
+                              //   push(context, const DiscountScreen());
+                              // }),
                               profileOption(
                                   "Settings", "Notifications, Passwords", () {
                                 push(context, const SettingsScreen());
@@ -152,11 +153,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   () async {
                                 await BlocProvider.of<UserCubit>(context)
                                     .logOut();
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const LoginScreen()),
-                                    (_) => false);
+                                showToast("Logged out", Colors.green);
+                                pop(context);
+                                // Navigator.pushAndRemoveUntil(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => const LoginScreen(Other: true,)),
+                                //     (_) => false);
                               }),
                             ],
                           ),

@@ -13,8 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
-
+  const SignUpScreen({Key? key, required this.other}) : super(key: key);
+  final bool other;
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -307,18 +307,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             id: ""));
                             if (created) {
                               showToast("Success", Constants.primaryColor);
-                              await BlocProvider.of<CartCubit>(context)
-                                  .initializeCart();
-                              await BlocProvider.of<ProductCubit>(context)
-                                  .getProducts();
-                              var sp = await SharedPreferences.getInstance();
-                              MyUser newUser = MyUser.fromJson(
-                                  json.decode(sp.getString('user')!));
-                              push(
-                                  context,
-                                  NavigationScreen(
-                                    id: newUser.id!,
-                                  ));
+                              if (widget.other) {
+                                pop(context);
+                                pop(context);
+                              } else {
+                                var sp = await SharedPreferences.getInstance();
+                                MyUser newUser = MyUser.fromJson(
+                                    json.decode(sp.getString('user')!));
+                                push(
+                                    context,
+                                    NavigationScreen(
+                                      id: newUser.id!,
+                                    ));
+                              }
                             }
                           } else {
                             showToast("Please fill all fields",
