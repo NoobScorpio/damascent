@@ -1,5 +1,4 @@
 import 'package:damascent/data_management/models/cart_item.dart';
-import 'package:flutter/cupertino.dart';
 
 class MyCart {
   MyCart._privateConstructor();

@@ -225,7 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ),
                           );
                         } else {
-                          return SizedBox();
+                          return const SizedBox();
                         }
                       },
                     ),

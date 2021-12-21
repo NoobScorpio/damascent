@@ -96,157 +96,129 @@ class _ProductScreenState extends State<ProductScreen> {
             const SizedBox(
               height: 25,
             ),
-            Center(
-              child: Stack(
-                children: [
-                  // Positioned(
-                  //   bottom: 50,
-                  //   left: 0,
-                  //   right: 0,
-                  //   child: Image.asset(
-                  //     "assets/base.png",
-                  //     scale: 0.9,
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Image.network(
-                      // "$imageURL/${product.image1}",
-                      "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 elevation: 0,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Eau De Parfum',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        product.pname,
-                        style: Constants.avgStyleAltBold,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      // RatingBar(
-                      //   initialRating: 5.0,
-                      //   minRating: 0,
-                      //   maxRating: 5.0,
-                      //   direction: Axis.horizontal,
-                      //   allowHalfRating: true,
-                      //   itemCount: 5,
-                      //   ignoreGestures: true,
-                      //   itemSize: 15,
-                      //   ratingWidget: RatingWidget(
-                      //       half: Icon(
-                      //         Icons.star_half,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       ),
-                      //       full: Icon(
-                      //         Icons.star,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       ),
-                      //       empty: Icon(
-                      //         Icons.star_border_outlined,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       )),
-                      //   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                      //   onRatingUpdate: (val) {},
-                      // ),
-                      // SizedBox(
-                      //   height: 15,
-                      // ),
-                      Text(
-                        "\$${product.price}",
-                        style: Constants.priceStyleAlt,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Text(
-                        "Description",
-                        style: Constants.avgStyleAltBold,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Text(
-                        product.description,
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      Center(
-                        child: InkWell(
-                          onTap: () {
-                            addToCart(product: product, context: context);
-                          },
-                          child: SizedBox(
-                            width: 180,
-                            child: Card(
-                              color: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Container(
+                        height: 500,
+                        width: getWidth(context),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          color: Colors.black,
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                "$imageURL/${product.image3}",
                               ),
-                              elevation: 0,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Add to cart",
-                                        style: Constants.avgStyleBold,
-                                      ),
+                              fit: BoxFit.fitWidth),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.keyword,
+                            style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            product.pname,
+                            style: Constants.avgStyleAltBold,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            "£${product.price}",
+                            style: Constants.priceStyleAlt,
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Text(
+                            "Description",
+                            style: Constants.avgStyleAltBold,
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Text(
+                            product.description,
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Center(
+                            child: InkWell(
+                              onTap: () {
+                                addToCart(product: product, context: context);
+                              },
+                              child: SizedBox(
+                                width: 180,
+                                child: Card(
+                                  color: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  elevation: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0, vertical: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Add to cart",
+                                            style: Constants.avgStyleBold,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 1,
+                                          height: 35,
+                                          color: Colors.white,
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.add_shopping_cart,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Container(
-                                      width: 1,
-                                      height: 35,
-                                      color: Colors.white,
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.add_shopping_cart,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

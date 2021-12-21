@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
@@ -11,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class UserRepository {
   Future<bool> logIn({required String email, required String password});
   Future<bool> updateUser(MyUser user);
-  Future<bool> createAccount({required MyUser user});
 }
 
 class UserRepositoryImpl implements UserRepository {
@@ -37,8 +35,86 @@ class UserRepositoryImpl implements UserRepository {
     return false;
   }
 
-  @override
-  Future<bool> createAccount({required MyUser user}) async {
+  static Future<MyUser> createGuestAccount({required MyUser user}) async {
+    var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
+    List<MyUser> users = UserResultModel.fromJson(json.decode(resp.body)).users;
+    for (MyUser usr in users) {
+      if (usr.email == user.email) {
+        debugPrint("GUEST USER FOUND");
+        bool update = await updateGuestUser(usr);
+        if (update) {
+          debugPrint("GUEST USER UPDATED");
+          return usr;
+        } else {
+          debugPrint("GUEST USER FOUND NOT UPDATED");
+          return MyUser(id: "0");
+        }
+      }
+    }
+    debugPrint("GUEST USER NOT FOUND ${user.toJson()}");
+    var response = await http.post(Uri.parse(baseURL + "/create.php"),
+        body: json.encode({
+
+          "fname": user.fName.toString(),
+          "lname": user.lName.toString(),
+          "email": user.email.toString(),
+          "phone": user.phone.toString(),
+          "country": user.country.toString(),
+          "state": user.state.toString(),
+          "city": user.city.toString(),
+          "zip": user.zip.toString(),
+          "address": user.address.toString(),
+          "address1": user.address1.toString(),
+          "password": " ",
+        }));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // debugPrint("${json.decode(response.body)['message']}");
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
+      List<MyUser> users =
+          UserResultModel.fromJson(json.decode(resp.body)).users;
+      for (MyUser usr in users) {
+        if (usr.email == user.email) {
+          user = usr;
+        }
+      }
+      await sp.setString('guest', json.encode(user.toJson()));
+      return user;
+    } else if (response.statusCode == 400) {
+      // debugPrint(response.body.toString());
+      showToast(json.decode(response.body)['message'], Constants.primaryColor);
+      return MyUser(id: "0");
+    } else if (response.statusCode == 500) {
+      showToast('Internal server error.', Constants.primaryColor);
+
+      return MyUser(id: "0");
+    } else {
+      showToast('Something went wrong', Constants.primaryColor);
+      return MyUser(id: "0");
+    }
+  }
+
+  static Future<bool> updateGuestUser(MyUser user) async {
+    var response = await http.post(Uri.parse(baseURL + "/update.php"),
+        body: json.encode(user.toJson()));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      debugPrint("INSIDE LOGIN : ${response.body}");
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      await sp.setString('guest', json.encode(user.toJson()));
+      return true;
+    } else if (response.statusCode == 400) {
+      showToast(json.decode(response.body)['message'], Constants.primaryColor);
+      return false;
+    } else if (response.statusCode == 500) {
+      showToast(json.decode(response.body)['message'], Constants.primaryColor);
+      return false;
+    } else {
+      showToast(json.decode(response.body)['message'], Constants.primaryColor);
+      return false;
+    }
+  }
+
+  static Future<bool> createAccount({required MyUser user}) async {
     var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
     List<MyUser> users = UserResultModel.fromJson(json.decode(resp.body)).users;
     for (MyUser usr in users) {

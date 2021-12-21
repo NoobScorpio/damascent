@@ -1,4 +1,3 @@
-import 'package:damascent/screens/login_screen.dart';
 import 'package:damascent/screens/navigation_screen.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';

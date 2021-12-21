@@ -5,7 +5,20 @@ import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+showLoader(context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    barrierColor: Colors.transparent,
+    builder: (_) => Center(
+      child: Image.asset(
+        "assets/loading.gif",
+        scale: 2,
+      ),
+    ),
+  );
+}
 
 void showToast(String msg, Color color) {
   Fluttertoast.showToast(
@@ -23,7 +36,7 @@ void addToCart({required Product product, context}) async {
     showToast("Product out of stock", Constants.primaryColor);
   } else {
     showToast("Adding product", Constants.primaryColor);
-    SharedPreferences sp = await SharedPreferences.getInstance();
+    // SharedPreferences sp = await SharedPreferences.getInstance();
 
     // bool? loggedIn = sp.getBool('loggedIn');
     // if (loggedIn == null || loggedIn == false) {

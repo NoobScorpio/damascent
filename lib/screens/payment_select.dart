@@ -82,56 +82,56 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                   height: 25,
                 ),
 
-                //CARD
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context, 0);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Card(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      elevation: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 25, horizontal: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.cashRegister,
-                                  color: Colors.orange,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
-                                  child: Text(
-                                    "Cash on Delivery",
-                                    style: Constants.avgStyleAltBold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Radio(
-                              activeColor: Constants.primaryColor,
-                              value: 0,
-                              groupValue: group,
-                              onChanged: (val) {
-                                setState(() => group = val as int);
-                                Navigator.pop(context, 0);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                //COD
+                // InkWell(
+                //   onTap: () {
+                //     Navigator.pop(context, 0);
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 8),
+                //     child: Card(
+                //       color: Colors.white,
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //       ),
+                //       elevation: 0,
+                //       child: Padding(
+                //         padding: const EdgeInsets.symmetric(
+                //             vertical: 25, horizontal: 25),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Row(
+                //               children: [
+                //                 const Icon(
+                //                   FontAwesomeIcons.cashRegister,
+                //                   color: Colors.orange,
+                //                 ),
+                //                 Padding(
+                //                   padding: const EdgeInsets.symmetric(
+                //                       horizontal: 15.0),
+                //                   child: Text(
+                //                     "Cash on Delivery",
+                //                     style: Constants.avgStyleAltBold,
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //             Radio(
+                //               activeColor: Constants.primaryColor,
+                //               value: 0,
+                //               groupValue: group,
+                //               onChanged: (val) {
+                //                 setState(() => group = val as int);
+                //                 Navigator.pop(context, 0);
+                //               },
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 12,
                 ),
@@ -211,14 +211,14 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                             Row(
                               children: [
                                 const Icon(
-                                  FontAwesomeIcons.bitcoin,
-                                  color: Colors.orange,
+                                  FontAwesomeIcons.paypal,
+                                  color: Colors.blue,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0),
                                   child: Text(
-                                    "Bitcoin",
+                                    "Paypal",
                                     style: Constants.avgStyleAltBold,
                                   ),
                                 ),

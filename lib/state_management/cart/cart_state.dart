@@ -1,6 +1,5 @@
 import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 abstract class CartState extends Equatable {}
 
@@ -9,13 +8,11 @@ class CartInitialState extends CartState {
 
   CartInitialState(this.carItems);
   @override
-  // TODO: implement props
   List<Object> get props => [carItems];
 }
 
 class CartLoadingState extends CartState {
   @override
-  // TODO: implement props
   List<Object> get props => [];
 }
 
@@ -29,7 +26,6 @@ class CartLoadedState extends CartState {
       required this.discount});
 
   @override
-  // TODO: implement props
   List<Object> get props => [cartItems];
 }
 
@@ -39,7 +35,6 @@ class CartErrorState extends CartState {
   CartErrorState({required this.message});
 
   @override
-  // TODO: implement props
   List<Object> get props => [message];
 }
 
@@ -53,7 +48,6 @@ class CartItemAddedState extends CartState {
       required this.discount});
 
   @override
-  // TODO: implement props
   List<Object> get props => [added];
 }
 
@@ -67,7 +61,6 @@ class CartItemRemoveState extends CartState {
       required this.removed});
 
   @override
-  // TODO: implement props
   List<Object> get props => [removed];
 }
 
@@ -77,6 +70,5 @@ class GetCartItemState extends CartState {
   GetCartItemState({required this.cartItems});
 
   @override
-  // TODO: implement props
   List<Object> get props => [cartItems];
 }

@@ -1,8 +1,6 @@
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
-import 'package:damascent/screens/discount_screen.dart';
-import 'package:damascent/screens/login_screen.dart';
 import 'package:damascent/screens/my_orders.dart';
 import 'package:damascent/screens/personal_info.dart';
 import 'package:damascent/screens/settings_screen.dart';
@@ -127,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             children: [
                               profileOption(
-                                  "My orders", "Already have 3 orders", () {
+                                  "My orders", "Check your placed orders", () {
                                 push(context,
                                     MyOrdersScreen(id: state.user.id ?? ""));
                               }),
@@ -136,6 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 push(
                                     context,
                                     PersonalInformation(
+                                      log: true,
                                       user: state.user,
                                       checkOut: false,
                                     ));

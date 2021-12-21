@@ -1,10 +1,6 @@
-import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/cart_item.dart';
-import 'package:damascent/data_management/models/product.dart';
 import 'package:damascent/screens/checkout_screen.dart';
-import 'package:damascent/screens/login_screen.dart';
-import 'package:damascent/screens/profile_screen.dart';
 import 'package:damascent/screens/widgets/product_widget.dart';
 import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/cart/cart_state.dart';
@@ -134,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                                     style: Constants.priceStyleAlt,
                                   ),
                                   Text(
-                                    "\$${cartItems[index].product.price} x ${cartItems[index].qty}",
+                                    "£${cartItems[index].product.price} x ${cartItems[index].qty}",
                                     style: Constants.priceStyleAlt,
                                   ),
                                 ],
@@ -166,7 +162,7 @@ class _CartScreenState extends State<CartScreen> {
                         ],
                       ),
                       Text(
-                        "\$$total",
+                        "£$total",
                         style: Constants.avgStyleAltBold,
                       ),
                     ],
@@ -184,19 +180,30 @@ class _CartScreenState extends State<CartScreen> {
             onTap: () {
               if (ustate is UserLoadedState) {
                 if (ustate.user.id == "" || ustate.user.id == null) {
-                  showToast("Not logged in", Colors.red);
-                  push(context, const LoginScreen(other: true));
+                  push(
+                      context,
+                      CheckoutScreen(
+                        log: false,
+                        total: total,
+                        cartItems: cartItems,
+                      ));
                 } else {
                   push(
                       context,
                       CheckoutScreen(
+                        log: true,
                         total: total,
                         cartItems: cartItems,
                       ));
                 }
               } else {
-                showToast("Not logged in", Colors.red);
-                push(context, const LoginScreen(other: true));
+                push(
+                    context,
+                    CheckoutScreen(
+                      log: false,
+                      total: total,
+                      cartItems: cartItems,
+                    ));
               }
             },
             child: Center(

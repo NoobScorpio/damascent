@@ -64,7 +64,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset("assets/Fav.png"),
-            activeIcon: Image.asset("assets/Fav.png"),
+            activeIcon: Image.asset(
+              "assets/selected_Fav.png",
+            ),
             label: 'Business',
           ),
         ],

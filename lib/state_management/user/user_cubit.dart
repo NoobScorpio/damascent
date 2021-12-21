@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:damascent/data_management/models/cart.dart';
-import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/my_user.dart';
-import 'package:damascent/data_management/models/user.dart';
 import 'package:damascent/data_management/repos/user_repo.dart';
 import 'package:damascent/state_management/user/user_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +21,7 @@ class UserCubit extends Cubit<UserState> {
         var sp = await SharedPreferences.getInstance();
         var usrString = sp.getString('user') ?? '';
         MyUser u = MyUser.fromJson(json.decode(usrString));
+        await sp.setString("guest", "");
         emit(UserLoadedState(user: u));
         return true;
       } else {
@@ -40,7 +38,7 @@ class UserCubit extends Cubit<UserState> {
     try {
       emit(UserLoadingState());
       debugPrint("CREATE USER: ${user.toJson()}");
-      bool created = await userRepository.createAccount(user: user);
+      bool created = await UserRepositoryImpl.createAccount(user: user);
       if (created) {
         var sp = await SharedPreferences.getInstance();
         var usrString = sp.getString('user') ?? '';
@@ -49,6 +47,7 @@ class UserCubit extends Cubit<UserState> {
         // debugPrint("USER JSON $js");
         MyUser u = MyUser.fromJson(js);
         // debugPrint("USER ${u.toJson()}");
+        await sp.setString("guest", "");
         emit(UserLoadedState(user: u));
         return true;
       } else {
@@ -104,7 +103,7 @@ class UserCubit extends Cubit<UserState> {
       var cart = MyCart();
       cart.cartItem = [];
       await sp.setString('cart', json.encode(cart.toJson()));
-
+      await sp.setString("guest", "");
       emit(UserLoadedState(user: MyUser()));
     } on Exception {
       emit(UserErrorState(message: "Could not logout"));

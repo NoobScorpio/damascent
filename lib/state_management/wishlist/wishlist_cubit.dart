@@ -1,7 +1,6 @@
-import 'package:damascent/constants/common_functions.dart';
+
 import 'package:damascent/data_management/repos/product_repo.dart';
 import 'package:damascent/state_management/wishlist/wishlist_state.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WishlistCubit extends Cubit<WishlistState> {

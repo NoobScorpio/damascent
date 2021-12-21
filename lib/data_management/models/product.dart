@@ -9,7 +9,7 @@ class Product {
   late String qty;
   late String keyword;
   late String discount;
-
+  late String categories;
   Product(
       {required this.pId,
       required this.pname,
@@ -19,11 +19,13 @@ class Product {
       required this.price,
       required this.description,
       required this.qty,
+        required this.categories,
       required this.discount,
       required this.keyword});
 
   Product.fromJson(Map<String, dynamic> json) {
     pId = json['p_id'];
+    categories = json['categories'] ?? "";
     pname = json['pname'];
     image1 = json['image1'];
     image2 = json['image2'];
@@ -32,11 +34,13 @@ class Product {
     description = json['description'];
     qty = json['qty'];
     keyword = json['keyword'];
+    keyword = json['keyword'];
     discount = json['discount'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['categories'] = categories;
     data['p_id'] = pId;
     data['pname'] = pname;
     data['image1'] = image1;

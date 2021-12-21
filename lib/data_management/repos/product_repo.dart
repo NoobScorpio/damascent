@@ -46,7 +46,18 @@ class ProductRepositoryImpl implements ProductRepository {
         var data = json.decode(response.body)['records'];
         for (var p in data) {
           if (p['ProName'].toString().toLowerCase() == promo.toLowerCase()) {
-            return int.parse(p['value']);
+            final now = DateTime.now();
+            var dateStr = p['expiryDate'].toString().split("-");
+            final expirationDate = DateTime(int.parse(dateStr[0]),
+                int.parse(dateStr[1]), int.parse(dateStr[2]));
+            final bool isExpired = expirationDate.isBefore(now);
+
+            if (isExpired) {
+              showToast("Promo code is expired", Colors.red);
+              return 0;
+            } else {
+              return int.parse(p['value']);
+            }
           }
         }
         return 0;
@@ -81,7 +92,7 @@ class ProductRepositoryImpl implements ProductRepository {
         "total": "$total",
         "OrderTime": date
       };
-      print(jsonObj);
+      debugPrint(jsonObj.toString());
       var response = await http.post(Uri.parse(baseURL + "/createOrder.php"),
           body: json.encode(jsonObj));
       if (response.statusCode == 200 || response.statusCode == 201) {

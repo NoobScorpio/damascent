@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/product.dart';
@@ -9,7 +8,6 @@ import 'package:damascent/state_management/product/product_cubit.dart';
 import 'package:damascent/state_management/product/product_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.id}) : super(key: key);
@@ -28,15 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-    //   Future.delayed(const Duration(seconds: 2), () {
-    //     if (mounted) {
-    //       _controller.animateTo(100,
-    //           duration: const Duration(seconds: 2),
-    //           curve: Curves.fastOutSlowIn);
-    //     }
-    //   });
-    // });
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: Padding(
@@ -72,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       search: search);
                 }
               }),
+              // DISCOVER
               SizedBox(
                 width: double.maxFinite,
                 // height: 400,
@@ -107,32 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             InkWell(
                               onTap: () {
                                 List<Widget> widgets = [];
-                                // for (Product prod in state.products) {
-                                // widgets.add(DiscoverProductWidget(
-                                //   name: prod.pname,
-                                //   desc: prod.description,
-                                //   price: prod.price,
-                                //   image: prod.image1,
-                                //   product: prod,
-                                //   id: widget.id));
-
-                                // }
-                                for (int i = 0; i <= 20; i++) {
+                                for (Product prod in state.products) {
                                   widgets.add(DiscoverProductWidget(
-                                      name: "Eight ",
-                                      desc:
-                                          "EIGHT & BOB by EIGHT & BOB is a Aromatic fragrance for men."
-                                          "EIGHT & BOB was launched in 2012. ",
-                                      price: "200",
-                                      image:
-                                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                                      // product: Product(),
-                                      id: widget.id));
+                                      product: prod, id: widget.id));
                                 }
+
                                 push(
                                     context,
                                     DiscoverScreen(
-                                        products: widgets,
+                                        products: state.products,
                                         id: widget.id,
                                         title: "Discover"));
                               },
@@ -153,19 +126,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(
                               width: getWidth(context),
-                              height: getHeight(context) * 0.39,
+                              height: getHeight(context) * 0.395,
                               child: ListView.builder(
                                 controller: _controller,
                                 scrollDirection: Axis.horizontal,
-                                // itemCount: state.products.length,
-                                itemCount: 10,
+                                itemCount: state.products.length,
                                 itemBuilder: (context, index) {
-                                  return ProductWidgetMain(
-                                      product: state.products[0],
-                                      name: state.products[0].pname,
-                                      desc: state.products[0].description,
-                                      image: state.products[0].image1,
-                                      price: state.products[0].price,
+                                  return HomeDiscoverProductWidget(
+                                      product: state.products[index],
                                       id: widget.id);
                                 },
                               ),
@@ -190,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 25,
               ),
+              // HOT Deals
               SizedBox(
                 width: double.maxFinite,
                 // height: 400,
@@ -204,37 +173,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state.products == []) {
                         return buildLoading();
                       } else {
+                        List<Widget> widgets = [];
+                        for (int i = 0; i < state.products.length; i++) {
+                          for (int j = 0; j < categories.length; j++) {
+                            if (categories[j].toLowerCase().contains(
+                                state.products[i].keyword.toLowerCase())) {
+                              debugPrint(state.products[i].keyword);
+
+                              widgets.add(
+                                ProductWidgetCard(
+                                    product: state.products[i], id: widget.id),
+                              );
+                              break;
+                            }
+                          }
+                        }
                         return Column(
                           children: [
                             InkWell(
                               onTap: () {
-                                List<Widget> widgets = [];
-                                // for (Product prod in state.products) {
-                                // widgets.add(DiscoverProductWidget(
-                                //   name: prod.pname,
-                                //   desc: prod.description,
-                                //   price: prod.price,
-                                //   image: prod.image1,
-                                //   product: prod,
-                                //   id: widget.id));
-
-                                // }
-                                for (int i = 0; i <= 20; i++) {
-                                  widgets.add(DiscoverProductWidget(
-                                      name: "Eight ",
-                                      desc:
-                                          "EIGHT & BOB by EIGHT & BOB is a Aromatic fragrance for men."
-                                          "EIGHT & BOB was launched in 2012. ",
-                                      price: "200",
-                                      image:
-                                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                                      // product: Product(),
-                                      id: widget.id));
-                                }
                                 push(
                                     context,
                                     DiscoverScreen(
-                                        products: widgets,
+                                        products: state.products,
                                         id: widget.id,
                                         title: "Hot"));
                               },
@@ -243,35 +204,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Hot Deals",
+                                    "Families",
                                     style: Constants.avgStyleAltBold,
                                   ),
                                   const Icon(Icons.arrow_forward),
                                 ],
                               ),
                             ),
-                            ListView.builder(
-                              // itemCount: state.products.length,
-                              itemCount: 10,
+                            ListView(
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return
-                                    // state.products[index].keyword == "hot"
-                                    // ?
-                                    Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: ProductWidgetCard(
-                                      product: state.products[0],
-                                      name: state.products[0].pname,
-                                      discount: state.products[0].discount,
-                                      price: state.products[0].price,
-                                      image: state.products[0].image1,
-                                      id: widget.id),
-                                )
-                                    // : Container()
-                                    ;
-                              },
+                              children: widgets,
                             ),
                           ],
                         );

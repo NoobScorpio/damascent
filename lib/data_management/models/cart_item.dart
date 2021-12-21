@@ -1,6 +1,4 @@
 import 'package:damascent/data_management/models/product.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class CartItem {
   late int qty;

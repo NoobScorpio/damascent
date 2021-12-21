@@ -77,12 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: ProductWidgetCard(
-                              product: widget.products[index],
-                              name: widget.products[index].pname,
-                              discount: widget.products[index].discount,
-                              price: widget.products[index].price,
-                              image: widget.products[index].image1,
-                              id: widget.id),
+                              product: widget.products[index], id: widget.id),
                         )
                       : Container();
                 },

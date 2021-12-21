@@ -12,173 +12,137 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductWidgetMain extends StatelessWidget {
-  const ProductWidgetMain(
-      {Key? key,
-      required this.name,
-      required this.desc,
-      required this.price,
-      required this.image,
-      required this.product,
-      required this.id})
+class HomeDiscoverProductWidget extends StatelessWidget {
+  const HomeDiscoverProductWidget(
+      {Key? key, required this.product, required this.id})
       : super(key: key);
-  final String name, desc, price, image, id;
+  final String id;
   final Product product;
   @override
   Widget build(BuildContext context) {
+    debugPrint("$imageURL/${product.image1}");
     return InkWell(
       onTap: () {
         push(context, ProductScreen(product: product, id: id));
       },
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 40.0, right: 15),
-            child: SizedBox(
-              width: 200,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 15),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Container(
+                  height: getHeight(context) * 0.25,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    borderRadius:const BorderRadius.all(Radius.circular(15)),
+                    color: Colors.black,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          "$imageURL/${product.image3}",
+                        ),
+                        fit: BoxFit.cover),
+                  ),
                 ),
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        // name,
-                        "Eight & Bob",
-                        style: Constants.avgStyleAltBold,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      // RatingBar(
-                      //   initialRating: 5.0,
-                      //   minRating: 0,
-                      //   maxRating: 5.0,
-                      //   direction: Axis.horizontal,
-                      //   allowHalfRating: true,
-                      //   itemCount: 5,
-                      //   ignoreGestures: true,
-                      //   itemSize: 15,
-                      //   ratingWidget: RatingWidget(
-                      //       half: Icon(
-                      //         Icons.star_half,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       ),
-                      //       full: Icon(
-                      //         Icons.star,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       ),
-                      //       empty: Icon(
-                      //         Icons.star_border_outlined,
-                      //         color: Colors.amber,
-                      //         size: 5,
-                      //       )),
-                      //   itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                      //   onRatingUpdate: (val) {},
-                      // ),
+              ),
 
-                      Text(
-                        // desc,
-                        "EIGHT & BOB is a Aromatic fragrance for elegence",
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.pname,
+                      // "Eight & Bob",
+                      style: Constants.avgStyleAltBold,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      width: 180,
+                      child: Text(
+                        product.description,
+                        // "EIGHT & BOB is a Aromatic fragrance for elegence",
                         style: Constants.smallStyleAlt,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "\$$price",
-                            style: Constants.priceStyleAlt,
-                          ),
-                          BlocBuilder<UserCubit, UserState>(
-                              builder: (context, ustate) {
-                            return InkWell(
-                              onTap: () async {
-                                if (ustate is UserLoadedState) {
-                                  if (ustate.user.id == "" ||
-                                      ustate.user.id == null) {
-                                    showToast("Not logged in", Colors.red);
-                                    push(context,
-                                        const LoginScreen(other: true));
-                                  } else {
-                                    showToast(
-                                        "Adding Item", Constants.primaryColor);
-                                    await BlocProvider.of<WishlistCubit>(
-                                            context)
-                                        .addWishlistProduct(
-                                            pid: product.pId,
-                                            id: ustate.user.id!);
-                                  }
-                                } else {
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "£${product.price}",
+                          style: Constants.priceStyleAlt,
+                        ),
+                        BlocBuilder<UserCubit, UserState>(
+                            builder: (context, ustate) {
+                          return InkWell(
+                            onTap: () async {
+                              if (ustate is UserLoadedState) {
+                                if (ustate.user.id == "" ||
+                                    ustate.user.id == null) {
                                   showToast("Not logged in", Colors.red);
                                   push(context, const LoginScreen(other: true));
+                                } else {
+                                  showToast(
+                                      "Adding Item", Constants.primaryColor);
+                                  await BlocProvider.of<WishlistCubit>(context)
+                                      .addWishlistProduct(
+                                          pid: product.pId,
+                                          id: ustate.user.id!);
                                 }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  "assets/Fav.png",
-                                  color: Colors.black,
-                                ),
+                              } else {
+                                showToast("Not logged in", Colors.red);
+                                push(context, const LoginScreen(other: true));
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                "assets/Fav.png",
+                                color: Colors.black,
                               ),
-                            );
-                          }),
-                        ],
-                      ),
-                      // const SizedBox(
-                      //   height: 5,
-                      // ),
-                    ],
-                  ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
+              // const SizedBox(
+              //   height: 5,
+              // ),
+            ],
           ),
-          Positioned(
-            top: -5,
-            left: 5,
-            child: SizedBox(
-              height: 220,
-              child: Image.network(
-                // "$imageURL/$image",
-                "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                scale: 2,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
 class ProductWidgetCard extends StatelessWidget {
-  const ProductWidgetCard(
-      {Key? key,
-      required this.name,
-      required this.image,
-      required this.price,
-      required this.discount,
-      required this.product,
-      required this.id})
+  const ProductWidgetCard({Key? key, required this.product, required this.id})
       : super(key: key);
-  final String name, image, price, discount, id;
+  final String id;
   final Product product;
   @override
   Widget build(BuildContext context) {
-    int totalDiscount =
-        int.parse(price) - (int.parse(discount) * int.parse(price)) ~/ 100;
+    int totalDiscount = int.parse(product.price) -
+        (int.parse(product.discount) * int.parse(product.price)) ~/ 100;
     return InkWell(
       onTap: () {
         push(
@@ -189,7 +153,7 @@ class ProductWidgetCard extends StatelessWidget {
             ));
       },
       child: SizedBox(
-        height: 100,
+        height: 110,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -207,9 +171,9 @@ class ProductWidgetCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Image.network(
-                      // "$imageURL/$image",
-                      "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                      scale: 1.5,
+                      "$imageURL/${product.image1}",
+                      // "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                      // scale: 1.5,
                     ),
                   ),
                 ),
@@ -223,14 +187,19 @@ class ProductWidgetCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        // name,
-                        "Eight & Bob",
+                        product.pname,
+                        // "Eight & Bob",
                         style: Constants.avgStyleAltBold,
+                      ),
+                      Text(
+                        product.keyword,
+                        // "Eight & Bob",
+                        style: Constants.smallStyleAlt,
                       ),
                       Row(
                         children: [
                           Text(
-                            "\$$totalDiscount",
+                            "£$totalDiscount",
                             style: const TextStyle(
                                 color: Colors.orange,
                                 fontSize: 16,
@@ -286,91 +255,88 @@ class ProductNotificationCard extends StatelessWidget {
               product: product,
             ));
       },
-      child: Container(
-        // height: 150,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Order Placed",
-                      style: Constants.avgStyleAltBold,
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.watch_later,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "12:03",
-                          style: Constants.priceStyleAlt,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        width: 75,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Image.asset(
-                            "assets/product.png",
-                            // scale: 2.5,
-                          ),
-                        ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Order Placed",
+                    style: Constants.avgStyleAltBold,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.watch_later,
+                        color: Colors.black,
+                        size: 20,
                       ),
-                    ),
-                    Expanded(
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "12:03",
+                        style: Constants.priceStyleAlt,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      width: 75,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius:const BorderRadius.all(Radius.circular(8))),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 15.0, horizontal: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "DAMASCENT",
-                              style: Constants.avgStyleAlt,
-                            ),
-                            const Text(
-                              "\$90",
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            Text(
-                              "Showdownder Drive Kenner",
-                              style: Constants.priceStyleAlt,
-                            ),
-                          ],
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Image.asset(
+                          "assets/product.png",
+                          // scale: 2.5,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "DAMASCENT",
+                            style: Constants.avgStyleAlt,
+                          ),
+                          const Text(
+                            "£90",
+                            style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "Showdownder Drive Kenner",
+                            style: Constants.priceStyleAlt,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -379,7 +345,7 @@ class ProductNotificationCard extends StatelessWidget {
 }
 
 class ProductWidgetCart extends StatelessWidget {
-  ProductWidgetCart({
+  const ProductWidgetCart({
     Key? key,
     required this.product,
     required this.qty,
@@ -387,7 +353,8 @@ class ProductWidgetCart extends StatelessWidget {
   }) : super(key: key);
   final Product product;
   final int qty;
-  CartItem cartItem;
+  // TODO: CHECK IF FINAL DO PROBLEMS
+  final CartItem cartItem;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -417,16 +384,14 @@ class ProductWidgetCart extends StatelessWidget {
                     child: Container(
                       width: 100,
                       decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                            "$imageURL/${product.image1}",
+                            // "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                          )),
                           color: Colors.grey.shade200,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8))),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Image.network(
-                          // "$imageURL/${product.image1}",
-                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                        ),
-                      ),
                     ),
                   ),
                   Expanded(
@@ -441,8 +406,8 @@ class ProductWidgetCart extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                // product.pname,
-                                "Eight & Bob",
+                                product.pname,
+                                // "Eight & Bob",
                                 style: Constants.avgStyleAltBold,
                               ),
                               Text(
@@ -458,7 +423,7 @@ class ProductWidgetCart extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "\$${product.price}",
+                                "£${product.price}",
                                 style: const TextStyle(
                                     color: Colors.orange,
                                     fontSize: 16,
@@ -584,18 +549,16 @@ class ProductWishlistCard extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       width: 100,
+                      height: 120,
                       decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                            "$imageURL/${product.image1}",
+                            // "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                          )),
                           color: Colors.grey.shade200,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(8))),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Image.network(
-                          // "$imageURL/${product.image1}",
-                          "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                          // scale: 2.5,
-                        ),
-                      ),
                     ),
                   ),
                   Expanded(
@@ -610,8 +573,8 @@ class ProductWishlistCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                // product.pname,
-                                "Eight & Bob",
+                                product.pname,
+                                // "Eight & Bob",
                                 style: Constants.avgStyleAltBold,
                               ),
                               Text(
@@ -625,7 +588,7 @@ class ProductWishlistCard extends StatelessWidget {
                                 height: 5,
                               ),
                               Text(
-                                "\$${product.price}",
+                                "£${product.price}",
                                 style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 16,
@@ -639,25 +602,6 @@ class ProductWishlistCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              // InkWell(
-                              //   onTap: () {
-                              //     addToCart(product: product, context: context);
-                              //   },
-                              //   child: Container(
-                              //     // width: 75,
-                              //     decoration: BoxDecoration(
-                              //         color: Colors.grey.shade200,
-                              //         borderRadius: const BorderRadius.all(
-                              //             Radius.circular(8))),
-                              //     child: const Padding(
-                              //       padding: EdgeInsets.all(8.0),
-                              //       child: Icon(
-                              //         Icons.shopping_cart_outlined,
-                              //         color: Colors.black,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                               InkWell(
                                 onTap: () async {
                                   showToast(
@@ -699,43 +643,49 @@ class ProductWishlistCard extends StatelessWidget {
 
 class DiscoverProductWidget extends StatelessWidget {
   const DiscoverProductWidget(
-      {Key? key,
-      required this.name,
-      required this.desc,
-      required this.price,
-      required this.image,
-      // required this.product,
-      required this.id})
+      {Key? key, required this.product, required this.id})
       : super(key: key);
-  final String name, desc, price, image, id;
-  // final Product product;
+  final String id;
+  final Product product;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // push(context, ProductScreen(product: product, id: id));
+        push(context, ProductScreen(product: product, id: id));
       },
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 0,
+          child: Column(
+            children: [
+              Container(
+                // width: 100,
+                height: 110,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          "$imageURL/${product.image1}",
+                          // "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
+                        )),
+                    color: Colors.grey.shade200,
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
               ),
-              elevation: 0,
-              child: Padding(
+              Padding(
                 padding: const EdgeInsets.only(left: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.only(top: 12.0),
                       child: Text(
-                        // name,
-                        "Eight & Bob",
+                        product.pname,
+                        // "Eight & Bob",
                         style: Constants.avgStyleAltBold,
                       ),
                     ),
@@ -750,7 +700,7 @@ class DiscoverProductWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "\$$price",
+                          "£${product.price}",
                           style: Constants.priceStyleAlt,
                         ),
                         InkWell(
@@ -783,22 +733,9 @@ class DiscoverProductWidget extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            ],
           ),
-          Positioned(
-            top: -5,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              height: 100,
-              child: Image.network(
-                // "$imageURL/$image",
-                "https://www.pngplay.com/wp-content/uploads/2/Perfume-Transparent-Image.png",
-                scale: 7,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

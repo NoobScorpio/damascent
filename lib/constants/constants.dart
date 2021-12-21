@@ -8,7 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const baseURL = "https://damascent.com/api/package";
-const imageURL = "https://www.damascent.com";
+const imageURL = "https://www.damascent.com/admin/upload";
+List<String> categories = [
+  "Earthy & Woody",
+  "Oud, floral, Oriental",
+  "Floral Woody Musk",
+  "Aromatic Fougere fragrance, citrusy",
+  "Woody Floral Sweet Oriental",
+  "Sweet Leathery",
+  "Chypre Fruity, Fresh",
+];
 Widget getHeader({context, required bool back, required text}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -136,9 +145,16 @@ Widget getHeader({context, required bool back, required text}) {
   );
 }
 
-Widget getTextFieldProfile(cont, text) {
-  return TextField(
+Widget getTextFieldProfile(
+  cont,
+  text,
+  input,
+  validator,
+) {
+  return TextFormField(
     controller: cont,
+    keyboardType: input,
+    validator: validator,
     decoration: InputDecoration(
         hintText: text,
         hintStyle: const TextStyle(color: Colors.grey),

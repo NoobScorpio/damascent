@@ -61,8 +61,8 @@ class _NotificationsState extends State<Notifications> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                  return const Padding(
+                    padding:  EdgeInsets.only(bottom: 8.0),
                     child: SizedBox(),
                     // child: ProductNotificationCard(),
                   );
