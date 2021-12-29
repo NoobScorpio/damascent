@@ -252,7 +252,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         group == 0
                                             ? FontAwesomeIcons.cashRegister
                                             : (group == 1
-                                                ? FontAwesomeIcons.stripe
+                                                ? FontAwesomeIcons.creditCard
                                                 : FontAwesomeIcons.paypal),
                                         size: 30,
                                       ),
@@ -264,8 +264,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         group == 0
                                             ? "Cash on Delivery"
                                             : (group == 1
-                                                ? "Stripe payment"
-                                                : "Paypal payment"),
+                                                ? "Credit/Debit Card"
+                                                : "Paypal"),
                                         style: const TextStyle(
                                             color: Colors.grey,
                                             fontSize: 18,
@@ -335,7 +335,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   ],
                                 ),
                                 Text(
-                                  "£20.23",
+                                  "0.0",
                                   style: Constants.priceStyleAlt,
                                 ),
                               ],
@@ -450,23 +450,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                       ),
                       const Divider(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Delivery",
-                              style: Constants.priceStyleAlt,
-                            ),
-                            Text(
-                              "£20",
-                              style: Constants.avgStyleAltBold,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       horizontal: 25, vertical: 8),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         "Delivery",
+                      //         style: Constants.priceStyleAlt,
+                      //       ),
+                      //       Text(
+                      //         "£20",
+                      //         style: Constants.avgStyleAltBold,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       if (promo)
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -496,7 +496,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               style: Constants.priceStyleAlt,
                             ),
                             Text(
-                              "£${total + 20}",
+                              "£${total + 0}",
                               style: Constants.avgStyleAltBold,
                             ),
                           ],
@@ -508,7 +508,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       //BUTTON
                       InkWell(
                         onTap: () async {
-                          var finalTotal = total + discount + 20;
+                          var finalTotal = total + discount + 0;
                           if (group == 2 || group == 1) {
                             bool done = await Navigator.push(
                                     context,
@@ -810,7 +810,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   group == 0
                                       ? FontAwesomeIcons.cashRegister
                                       : (group == 1
-                                          ? FontAwesomeIcons.stripe
+                                          ? FontAwesomeIcons.creditCard
                                           : FontAwesomeIcons.paypal),
                                   size: 30,
                                 ),
@@ -822,8 +822,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   group == 0
                                       ? "Cash on Delivery"
                                       : (group == 1
-                                          ? "Stripe payment"
-                                          : "Paypal payment"),
+                                      ? "Credit/Debit Card"
+                                      : "Paypal"),
                                   style: const TextStyle(
                                       color: Colors.grey,
                                       fontSize: 18,
@@ -893,7 +893,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ],
                           ),
                           Text(
-                            "£20.23",
+                            "£0.0",
                             style: Constants.priceStyleAlt,
                           ),
                         ],
@@ -1000,23 +1000,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 const Divider(),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Delivery",
-                        style: Constants.priceStyleAlt,
-                      ),
-                      Text(
-                        "£20",
-                        style: Constants.avgStyleAltBold,
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         "Delivery",
+                //         style: Constants.priceStyleAlt,
+                //       ),
+                //       Text(
+                //         "£0",
+                //         style: Constants.avgStyleAltBold,
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 if (promo)
                   Padding(
                     padding:
@@ -1046,7 +1046,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         style: Constants.priceStyleAlt,
                       ),
                       Text(
-                        "£${total + 20}",
+                        "£${total + 0}",
                         style: Constants.avgStyleAltBold,
                       ),
                     ],
@@ -1058,7 +1058,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 //BUTTON
                 InkWell(
                   onTap: () async {
-                    var finalTotal = total + discount + 20;
+                    var finalTotal = total + discount + 0;
 
                     if (group == 2 || group == 1) {
                       bool done = await Navigator.push(

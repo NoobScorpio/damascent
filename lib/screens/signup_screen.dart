@@ -245,11 +245,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   horizontal: 50, vertical: 2),
                               child: getTextField(address2, "Address2",
                                   Icons.home, TextInputType.name, (val) {
-                                if (val.toString().isEmpty) {
-                                  return "Please enter address 2";
-                                } else {
-                                  return null;
-                                }
+                                // if (val.toString().isEmpty) {
+                                //   return "Please enter address 2";
+                                // } else {
+                                //   return null;
+                                // }
                               }, false)),
                           Padding(
                               padding: const EdgeInsets.symmetric(

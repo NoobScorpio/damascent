@@ -241,11 +241,11 @@ class _PersonalInformationState extends State<PersonalInformation> {
                         "Address2",
                         TextInputType.name,
                         (val) {
-                          if (val.toString().isEmpty) {
-                            return "Please enter address 2";
-                          } else {
-                            return null;
-                          }
+                          // if (val.toString().isEmpty) {
+                          //   return "Please enter address 2";
+                          // } else {
+                          //   return null;
+                          // }
                         },
                       ),
                       const SizedBox(

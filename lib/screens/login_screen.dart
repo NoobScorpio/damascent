@@ -107,21 +107,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  InkWell(
-                    onTap: () {
-                      push(context,const ForgetPasswordScreen());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 50.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          "Forgot your password?",
-                          style: Constants.smallStyle,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     push(context,const ForgetPasswordScreen());
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(right: 50.0),
+                  //     child: Align(
+                  //       alignment: Alignment.centerRight,
+                  //       child: Text(
+                  //         "Forgot your password?",
+                  //         style: Constants.smallStyle,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 50,
                   ),

@@ -71,9 +71,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return widget.products[index].pname
+                  return (widget.products[index].pname
                           .toLowerCase()
-                          .contains(widget.search.toLowerCase())
+                          .contains(widget.search.toLowerCase()) ||
+                      widget.products[index].keyword
+                          .toLowerCase()
+                          .contains(widget.search.toLowerCase()))
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: ProductWidgetCard(

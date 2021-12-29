@@ -107,21 +107,18 @@ class _ProductScreenState extends State<ProductScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: Container(
-                        height: 500,
-                        width: getWidth(context),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15)),
-                          color: Colors.black,
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                "$imageURL/${product.image3}",
-                              ),
-                              fit: BoxFit.fitWidth),
-                        ),
+                    Container(
+                      height: 400,
+                      width: getWidth(context),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        color: Colors.grey.shade200,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              "$imageURL/${product.image1}",
+                            ),
+                            fit: BoxFit.cover),
                       ),
                     ),
                     const SizedBox(
@@ -175,7 +172,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 addToCart(product: product, context: context);
                               },
                               child: SizedBox(
-                                width: 180,
+                                width: 220,
                                 child: Card(
                                   color: Colors.black,
                                   shape: RoundedRectangleBorder(
@@ -187,7 +184,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         horizontal: 15.0, vertical: 5),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),

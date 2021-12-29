@@ -96,18 +96,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                                List<Widget> widgets = [];
-                                for (Product prod in state.products) {
-                                  widgets.add(DiscoverProductWidget(
-                                      product: prod, id: widget.id));
-                                }
-
-                                push(
-                                    context,
-                                    DiscoverScreen(
-                                        products: state.products,
-                                        id: widget.id,
-                                        title: "Discover"));
+                                // List<Widget> widgets = [];
+                                // for (Product prod in state.products) {
+                                //   widgets.add(DiscoverProductWidget(
+                                //       product: prod, id: widget.id));
+                                // }
+                                //
+                                // push(
+                                //     context,
+                                //     DiscoverScreen(
+                                //         products: state.products,
+                                //         id: widget.id,
+                                //         title: "Discover"));
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Discover Scents",
                                     style: Constants.avgStyleAltBold,
                                   ),
-                                  const Icon(Icons.arrow_forward),
+                                  // const Icon(Icons.arrow_forward),
                                 ],
                               ),
                             ),
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(
                               width: getWidth(context),
-                              height: getHeight(context) * 0.395,
+                              height: getHeight(context) * 0.41,
                               child: ListView.builder(
                                 controller: _controller,
                                 scrollDirection: Axis.horizontal,
@@ -192,12 +192,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                push(
-                                    context,
-                                    DiscoverScreen(
-                                        products: state.products,
-                                        id: widget.id,
-                                        title: "Hot"));
+                                // push(
+                                //     context,
+                                //     DiscoverScreen(
+                                //         products: state.products,
+                                //         id: widget.id,
+                                //         title: "Hot"));
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Families",
                                     style: Constants.avgStyleAltBold,
                                   ),
-                                  const Icon(Icons.arrow_forward),
+                                  // const Icon(Icons.arrow_forward),
                                 ],
                               ),
                             ),

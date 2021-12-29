@@ -157,14 +157,14 @@ class _PaymentSelectScreenState extends State<PaymentSelectScreen> {
                             Row(
                               children: [
                                 const Icon(
-                                  FontAwesomeIcons.stripe,
+                                  FontAwesomeIcons.creditCard,
                                   color: Colors.redAccent,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0),
                                   child: Text(
-                                    "Stripe",
+                                    "Credit/Debit Card",
                                     style: Constants.avgStyleAltBold,
                                   ),
                                 ),

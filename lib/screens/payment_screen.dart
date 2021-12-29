@@ -59,7 +59,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
         body: WebView(
           onPageFinished: (page) async {
-            if (widget.type == "1") {
+
               if (page.contains('/shopping')) {
                 debugPrint('SUCCESS PAGE');
                 showToast("Payment Successful", Colors.green);
@@ -69,17 +69,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   Navigator.pop(context, true);
                 });
               }
-            } else {
-              if (page.contains('/success')) {
-                debugPrint('SUCCESS PAGE');
-                showToast("Payment Successful", Colors.green);
-                showToast(
-                    "You will be redirected to App shortly", Colors.green);
-                await Future.delayed(const Duration(seconds: 3)).then((value) {
-                  Navigator.pop(context, true);
-                });
-              }
-            }
+
             // }
           },
           javascriptMode: JavascriptMode.unrestricted,

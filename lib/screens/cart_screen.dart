@@ -239,7 +239,7 @@ class _CartScreenState extends State<CartScreen> {
                                 width: 15,
                               ),
                               Text(
-                                "Choose Delivery Services",
+                                "Delivery Services",
                                 style: Constants.avgStyleBold,
                               ),
                             ],

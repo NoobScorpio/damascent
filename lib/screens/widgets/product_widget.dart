@@ -28,6 +28,7 @@ class HomeDiscoverProductWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 15),
         child: Card(
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -37,13 +38,13 @@ class HomeDiscoverProductWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(1.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Container(
-                  height: getHeight(context) * 0.25,
-                  width: 200,
+                  height: getHeight(context) * 0.26,
+                  width: 205,
                   decoration: BoxDecoration(
                     borderRadius:const BorderRadius.all(Radius.circular(15)),
-                    color: Colors.black,
+                    color: Colors.grey.shade200,
                     image: DecorationImage(
                         image: NetworkImage(
                           "$imageURL/${product.image3}",
