@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +13,6 @@ class _NotificationsState extends State<Notifications> {
   bool loading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       Timer(const Duration(seconds: 3), () {

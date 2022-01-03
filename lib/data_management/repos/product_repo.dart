@@ -4,7 +4,6 @@ import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/order.dart';
 import 'package:damascent/data_management/models/product.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

@@ -8,7 +8,6 @@ import 'package:damascent/state_management/cart/cart_cubit.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:damascent/state_management/user/user_state.dart';
 import 'package:damascent/state_management/wishlist/wishlist_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +27,6 @@ class HomeDiscoverProductWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 15),
         child: Card(
-
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
@@ -43,7 +41,7 @@ class HomeDiscoverProductWidget extends StatelessWidget {
                   height: getHeight(context) * 0.26,
                   width: 205,
                   decoration: BoxDecoration(
-                    borderRadius:const BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                     color: Colors.grey.shade200,
                     image: DecorationImage(
                         image: NetworkImage(
@@ -298,7 +296,8 @@ class ProductNotificationCard extends StatelessWidget {
                       width: 75,
                       decoration: BoxDecoration(
                           color: Colors.grey.shade200,
-                          borderRadius:const BorderRadius.all(Radius.circular(8))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Image.asset(

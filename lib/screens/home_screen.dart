@@ -1,7 +1,6 @@
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/product.dart';
-import 'package:damascent/screens/discover_screen.dart';
 import 'package:damascent/screens/search_screen.dart';
 import 'package:damascent/screens/widgets/product_widget.dart';
 import 'package:damascent/state_management/product/product_cubit.dart';

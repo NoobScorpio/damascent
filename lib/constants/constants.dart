@@ -3,7 +3,6 @@ import 'package:damascent/screens/notifications.dart';
 import 'package:damascent/screens/profile_screen.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:damascent/state_management/user/user_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
