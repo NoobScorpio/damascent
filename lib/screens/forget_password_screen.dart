@@ -1,7 +1,7 @@
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/screens/new_password_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -52,13 +52,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       ),
                     ),
                   ),
-                  Center(
-                    child: SvgPicture.asset(
-                      "assets/forget.svg",
-                      semanticsLabel: 'Acme Logo',
-                      height: 150,
-                    ),
-                  ),
+                  //  Center(
+                  //  child: SvgPicture.asset(
+                  //  "assets/forget.svg",
+                  // semanticsLabel: 'Acme Logo',
+                  // height: 150,
+                  // ),
+                  //),
                   const SizedBox(
                     height: 25,
                   ),
@@ -108,7 +108,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        push(context,const NewPasswordScreen());
+                        push(context, const NewPasswordScreen());
                       },
                       child: const Text('Next',
                           style: TextStyle(

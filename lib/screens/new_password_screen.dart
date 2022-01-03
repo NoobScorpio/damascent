@@ -8,7 +8,7 @@ import 'package:damascent/state_management/product/product_cubit.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPasswordScreen extends StatefulWidget {
@@ -60,13 +60,13 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                       ),
                     ),
                   ),
-                  Center(
-                    child: SvgPicture.asset(
-                      "assets/forget.svg",
-                      semanticsLabel: 'Acme Logo',
-                      height: 150,
-                    ),
-                  ),
+                  //   Center(
+                  //    child: SvgPicture.asset(
+                  //     "assets/forget.svg",
+                  //      semanticsLabel: 'Acme Logo',
+                  //       height: 150,
+                  //      ),
+                  //    ),
                   const SizedBox(
                     height: 25,
                   ),

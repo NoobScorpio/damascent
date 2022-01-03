@@ -508,28 +508,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       //BUTTON
                       InkWell(
                         onTap: () async {
-                          var finalTotal = total + discount + 0;
-                          if (group == 2 || group == 1) {
-                            bool done = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => PaymentScreen(
-                                        price: finalTotal.toString(),
-                                        email: user.email!,
-                                        type: group.toString(),
-                                      ),
-                                    )) ??
-                                false;
-                            if (done) {
-                              await guestPayment(
-                                  group == 1 ? "stripe" : "paypal", finalTotal);
-                            } else {
-                              showToast(
-                                  "Payment was not completed", Colors.red);
-                            }
-                          } else {
-                            await guestPayment("cash", finalTotal);
-                          }
+                          await payment(user, true);
                         },
                         child: Center(
                           child: SizedBox(
@@ -613,11 +592,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     pop(context);
   }
 
-  Future<void> userPayment(state, method, finalTotal) async {
+  Future<void> userPayment(usr, method, finalTotal) async {
     showLoader(context);
     showToast("Placing order", Constants.primaryColor);
     bool ordered = await ProductRepositoryImpl.createOrder(
-        id: state.user.id!,
+        id: usr.id!,
         total: finalTotal,
         payment: "cash",
         items: widget.cartItems);
@@ -822,8 +801,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   group == 0
                                       ? "Cash on Delivery"
                                       : (group == 1
-                                      ? "Credit/Debit Card"
-                                      : "Paypal"),
+                                          ? "Credit/Debit Card"
+                                          : "Paypal"),
                                   style: const TextStyle(
                                       color: Colors.grey,
                                       fontSize: 18,
@@ -1058,26 +1037,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 //BUTTON
                 InkWell(
                   onTap: () async {
-                    var finalTotal = total + discount + 0;
-
-                    if (group == 2 || group == 1) {
-                      bool done = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => PaymentScreen(
-                                price: finalTotal.toString(),
-                                email: state.user.email!,
-                                type: group.toString()),
-                          ));
-                      if (done) {
-                        await userPayment(state,
-                            group == 1 ? "stripe" : "paypal", finalTotal);
-                      } else {
-                        showToast("Payment was not completed", Colors.red);
-                      }
-                    } else {
-                      await userPayment(state, "cash", finalTotal);
-                    }
+                    await payment(state.user, false);
                   },
                   child: Center(
                     child: SizedBox(
@@ -1140,5 +1100,45 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         return buildLoading();
       }
     });
+  }
+
+  Future<void> payment(MyUser usr, bool guest) async {
+    if (usr.email == null ||
+        usr.address == null ||
+        usr.city == null ||
+        usr.country == null ||
+        usr.phone == null) {
+      showToast("Please add address details", Colors.red);
+    } else {
+      var finalTotal = total + discount + 0;
+      if (group == 2 || group == 1) {
+        bool done = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PaymentScreen(
+                    price: finalTotal.toString(),
+                    email: usr.email!,
+                    type: group.toString(),
+                  ),
+                )) ??
+            false;
+        if (done) {
+          if (guest) {
+            await guestPayment(group == 1 ? "stripe" : "paypal", finalTotal);
+          } else {
+            await userPayment(
+                usr, group == 1 ? "stripe" : "paypal", finalTotal);
+          }
+        } else {
+          showToast("Payment was not completed", Colors.red);
+        }
+      } else {
+        if (guest) {
+          await guestPayment("cash", finalTotal);
+        } else {
+          await userPayment(usr, "cash", finalTotal);
+        }
+      }
+    }
   }
 }
