@@ -353,7 +353,7 @@ class ProductWidgetCart extends StatelessWidget {
   }) : super(key: key);
   final Product product;
   final int qty;
-  // TODO: CHECK IF FINAL DO PROBLEMS
+  
   final CartItem cartItem;
   @override
   Widget build(BuildContext context) {
