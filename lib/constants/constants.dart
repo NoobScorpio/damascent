@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const baseURL = "https://damascent.com/api/package";
+const uriPrefix = "https:/damascent.com";
 const imageURL = "https://www.damascent.com/admin/upload";
+const prefAgent = "agent";
 List<String> categories = [
   "Earthy & Woody",
   "Oud, floral, Oriental",

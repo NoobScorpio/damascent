@@ -26,20 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ShaderMask(
-              shaderCallback: (rect) {
-                return const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.black, Colors.transparent],
-                ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-              },
-              blendMode: BlendMode.colorBurn,
-              child: Image.asset("assets/login_bg.png"),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: ShaderMask(
+          //     shaderCallback: (rect) {
+          //       return const LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [Colors.black, Colors.transparent],
+          //       ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+          //     },
+          //     blendMode: BlendMode.colorBurn,
+          //     child: Image.asset("assets/login_bg.png"),
+          //   ),
+          // ),
           SingleChildScrollView(
             child: Center(
               child: Column(

@@ -27,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+     
+   
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: SingleChildScrollView(

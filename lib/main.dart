@@ -13,12 +13,61 @@ import 'package:google_fonts/google_fonts.dart';
 import 'constants/constants.dart';
 import 'data_management/repos/user_repo.dart';
 
-void main() {
+void main() async {
+  // await init();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+// Future init() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+// }
+
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // late AppLinks _appLinks;
+  @override
+  void initState() {
+    super.initState();
+    // initDeepLinks();
+  }
+
+  // void initDeepLinks() async {
+  //   _appLinks = AppLinks(
+  //     onAppLink: (Uri uri, String stringUri) {
+  //       debugPrint('onAppLink: $stringUri');
+  //       openAppLink(uri);
+  //     },
+  //   );
+
+  //   final appLink = await _appLinks.getInitialAppLink();
+  //   if (appLink != null && appLink.hasFragment && appLink.fragment != '/') {
+  //     debugPrint('getInitialAppLink: ${appLink.toString()}');
+  //     openAppLink(appLink);
+  //   }
+  // }
+
+  // Future<void> openAppLink(Uri uri) async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   if (uri.queryParameters.isNotEmpty) {
+  //     Map<String, String> query = uri.queryParameters;
+  //     await preferences.setString(
+  //         prefAgent,
+  //         json.encode({
+  //           "agent": query["name"],
+  //           "discount": int.parse(query["discount"] ?? "0"),
+  //           "applied": false
+  //         }));
+  //     showToast(
+  //         "Agent Discount Applied on next purchase", Constants.primaryColor);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

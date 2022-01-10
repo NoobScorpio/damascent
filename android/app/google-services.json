@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "838532130022",
+    "project_id": "damascent-69067",
+    "storage_bucket": "damascent-69067.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838532130022:android:536d7b4bfed5d011ad8727",
+        "android_client_info": {
+          "package_name": "com.damascent.damascent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838532130022-7utjafd8glfuvpk9cc6hbeac6svsig3f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqCoNPXgnJxIGwoeBTh7XYbeIH9a3WM6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838532130022-7utjafd8glfuvpk9cc6hbeac6svsig3f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
