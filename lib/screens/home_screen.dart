@@ -27,8 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-     
-   
+
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: SingleChildScrollView(
@@ -175,20 +174,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         return buildLoading();
                       } else {
                         List<Widget> widgets = [];
+                        List<String> added = [];
                         for (int i = 0; i < state.products.length; i++) {
-                          for (int j = 0; j < categories.length; j++) {
-                            if (categories[j].toLowerCase().contains(
-                                state.products[i].keyword.toLowerCase())) {
-                              debugPrint(state.products[i].keyword);
-
-                              widgets.add(
-                                ProductWidgetCard(
-                                    product: state.products[i], id: widget.id),
-                              );
-                              break;
-                            }
+                          if (!added.contains(state.products[i].keyword)) {
+                            widgets.add(
+                              ProductWidgetCard(
+                                  product: state.products[i], id: widget.id),
+                            );
+                            added.add(state.products[i].keyword);
                           }
                         }
+
                         return Column(
                           children: [
                             InkWell(

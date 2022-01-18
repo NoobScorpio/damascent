@@ -38,6 +38,45 @@ class ProductRepositoryImpl implements ProductRepository {
     }
   }
 
+  static Future<int> getAgent({required String link}) async {
+    try {
+      var links = link.split("?");
+      links = links[1].split("&");
+      String agent = links[0].split("=")[1];
+      String discount = links[1].split("=")[1];
+      var response = await http.get(Uri.parse(baseURL + "/agent.php"));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var data = json.decode(response.body)['records'];
+        for (var p in data) {
+          if (p['agent'].toString().toLowerCase() == agent.toLowerCase()) {
+            final now = DateTime.now();
+            var dateStr = p['expiryDate'].toString().split("-");
+            final expirationDate = DateTime(int.parse(dateStr[0]),
+                int.parse(dateStr[1]), int.parse(dateStr[2]));
+            final bool isExpired = expirationDate.isBefore(now);
+
+            if (isExpired) {
+              showToast("Discount is expired", Colors.red);
+              return 0;
+            } else {
+              return int.parse(p['value']);
+            }
+          }
+        }
+        return 0;
+      } else if (response.statusCode == 400) {
+        return 0;
+      } else if (response.statusCode == 500) {
+        return 0;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      debugPrint("ERROR IN PRODUCTS AGENT API: $e");
+      return 0;
+    }
+  }
+
   static Future<int> getPromo({required String promo}) async {
     try {
       var response = await http.get(Uri.parse(baseURL + "/promo.php"));

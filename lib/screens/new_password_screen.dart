@@ -12,7 +12,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPasswordScreen extends StatefulWidget {
-  const NewPasswordScreen({Key? key}) : super(key: key);
+  final String email;
+  final int code;
+  const NewPasswordScreen({Key? key, required this.email, required this.code})
+      : super(key: key);
 
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
@@ -20,7 +23,8 @@ class NewPasswordScreen extends StatefulWidget {
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
   TextEditingController pass2 = TextEditingController(),
-      pass = TextEditingController();
+      pass = TextEditingController(),
+      code = TextEditingController();
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -95,6 +99,20 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 50),
                             child: getTextField(
+                                code,
+                                'Enter code i.e 28580',
+                                Icons.lock_outline,
+                                TextInputType.visiblePassword, (val) {
+                              if (int.parse(val) != widget.code) {
+                                return 'Code does not match';
+                              } else {
+                                return null;
+                              }
+                            }, false),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 50),
+                            child: getTextField(
                                 pass,
                                 'New Password',
                                 Icons.lock_outline,
@@ -128,7 +146,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                   ElevatedButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          showToast("Logging in", Constants.primaryColor);
+                          showToast("Setting password", Constants.primaryColor);
                           if (pass2.text != "" && pass.text != "") {
                             bool loggedIn =
                                 await BlocProvider.of<UserCubit>(context)

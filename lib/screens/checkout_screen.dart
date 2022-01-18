@@ -34,12 +34,14 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   int group = 2;
   bool promo = false;
+  bool agent = false;
   int discount = 0;
+  int agentDiscount = 0;
   late int total;
   bool filled = false;
   MyUser user = MyUser();
   TextEditingController promoCont = TextEditingController();
-
+  TextEditingController agentCont = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -94,6 +96,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       deliveryWidget(),
 
                       promoWidget(),
+                      agentWidget(),
                       orderSummary(),
                       const SizedBox(
                         height: 25,
@@ -314,6 +317,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 deliveryWidget(),
 
                 promoWidget(),
+                agentWidget(),
                 orderSummary(),
                 const SizedBox(
                   height: 25,
@@ -646,6 +650,108 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
+  Widget agentWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //PROMO
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          child: Text(
+            "Apply agent discount",
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                color: Colors.black,
+                fontStyle: FontStyle.italic),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: TextField(
+                    controller: agentCont,
+                    decoration: InputDecoration(
+                        hintText: "Enter a valid agent link",
+                        hintStyle: const TextStyle(color: Colors.black),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none)),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () async {
+                  showLoader(context);
+                  if (agent) {
+                    showToast(
+                        "Discount already applied", Constants.primaryColor);
+                  } else {
+                    showToast(
+                        "Applying agent discount", Constants.primaryColor);
+                    int p = await ProductRepositoryImpl.getAgent(
+                        link: agentCont.text);
+                    if (p == 0) {
+                      showToast(
+                          "Discount link not valid", Constants.primaryColor);
+                    } else {
+                      setState(() {
+                        agentDiscount = (widget.total * (p / 100)).toInt();
+                        agent = true;
+                        total = getTotal();
+                      });
+                      showToast("Discount applied", Constants.primaryColor);
+                    }
+                  }
+                  pop(context);
+                },
+                child: Container(
+                  width: 100,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'apply',
+                      style: Constants.avgStyle,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  int getTotal() {
+    int t = widget.total;
+    if (promo) {
+      if (t - discount > 0) {
+        t = t - discount;
+      } else {
+        t = 0;
+      }
+    }
+    if (agent) {
+      if (t - agentDiscount > 0) {
+        t = t - agentDiscount;
+      } else {
+        t = 0;
+      }
+    }
+    return t;
+  }
+
   Widget promoWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -695,10 +801,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       showToast("Promo code not valid", Constants.primaryColor);
                     } else {
                       setState(() {
-                        total =
-                            (widget.total - (widget.total * (p / 100))).toInt();
                         discount = (widget.total * (p / 100)).toInt();
                         promo = true;
+                        total = getTotal();
                       });
                       showToast("Promo applied", Constants.primaryColor);
                     }

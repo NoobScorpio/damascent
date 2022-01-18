@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/screens/new_password_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,29 +12,29 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  TextEditingController email = TextEditingController(),
-      pass = TextEditingController();
+  TextEditingController email = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  int code = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ShaderMask(
-              shaderCallback: (rect) {
-                return const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.black, Colors.transparent],
-                ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-              },
-              blendMode: BlendMode.colorBurn,
-              child: Image.asset("assets/login_bg.png"),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.bottomCenter,
+          //   child: ShaderMask(
+          //     shaderCallback: (rect) {
+          //       return const LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: [Colors.black, Colors.transparent],
+          //       ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+          //     },
+          //     blendMode: BlendMode.colorBurn,
+          //     child: Image.asset("assets/login_bg.png"),
+          //   ),
+          // ),
           SingleChildScrollView(
             child: Center(
               child: Column(
@@ -108,7 +109,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        push(context, const NewPasswordScreen());
+                        code = Random().nextInt(100000);
+                        // if (formKey.currentState!.validate()) {
+                        //   code = Random().nextInt(100000)??0;
+                        //   bool sent =
+                        //       await UserRepositoryImpl.sendRecoveryEmail(
+                        //           email: email.text, code: code);
+                        //   push(context,  NewPasswordScreen(code: code,email: email.text,));
+                        // }
+                        push(
+                            context,
+                            NewPasswordScreen(
+                              code: code,
+                              email: email.text,
+                            ));
                       },
                       child: const Text('Next',
                           style: TextStyle(

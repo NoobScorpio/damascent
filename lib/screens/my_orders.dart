@@ -256,7 +256,7 @@ class OrderWidget extends StatelessWidget {
                     width: 15,
                   ),
                   Text(
-                    "\$$total",
+                    "£$total",
                     style: Constants.avgStyleAltBold,
                   ),
                 ],
