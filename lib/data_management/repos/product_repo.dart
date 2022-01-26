@@ -43,7 +43,7 @@ class ProductRepositoryImpl implements ProductRepository {
       var links = link.split("?");
       links = links[1].split("&");
       String agent = links[0].split("=")[1];
-      String discount = links[1].split("=")[1];
+      // String discount = links[1].split("=")[1];
       var response = await http.get(Uri.parse(baseURL + "/agent.php"));
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = json.decode(response.body)['records'];
@@ -180,7 +180,9 @@ class ProductRepositoryImpl implements ProductRepository {
       } else {
         showToast(json.decode(resp.body), Constants.primaryColor);
       }
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint(e.toString());
+      debugPrint(st.toString());
       showToast(e.toString(), Constants.primaryColor);
     }
   }

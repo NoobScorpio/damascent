@@ -5,7 +5,6 @@ import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/cart_item.dart';
 import 'package:damascent/data_management/models/my_user.dart';
 import 'package:damascent/data_management/repos/product_repo.dart';
-import 'package:damascent/data_management/repos/user_repo.dart';
 import 'package:damascent/screens/payment_screen.dart';
 import 'package:damascent/screens/payment_select.dart';
 import 'package:damascent/screens/personal_info.dart';
@@ -146,7 +145,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       await BlocProvider.of<CartCubit>(context).emptyCart();
       pop(context);
       showToast("Success", Colors.green);
-      await ProductRepositoryImpl.sendEmail(email: user.email);
+      await ProductRepositoryImpl.sendEmail(email: usr.email);
     } else {
       showToast("Could not place order", Colors.red);
     }

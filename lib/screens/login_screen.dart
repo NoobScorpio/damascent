@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
-import 'package:damascent/screens/forget_password_screen.dart';
 import 'package:damascent/screens/navigation_screen.dart';
 import 'package:damascent/screens/signup_screen.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';

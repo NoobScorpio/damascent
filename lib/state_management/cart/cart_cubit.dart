@@ -92,7 +92,7 @@ class CartCubit extends Cubit<CartState> {
       emit(CartLoadedState(
           cartItems: const [], subTotal: sub, total: total, discount: 0));
     } on Exception {
-      emit(CartErrorState(message: "Could not add item"));
+      emit(CartErrorState(message: "Could not empty cart"));
     }
   }
 
