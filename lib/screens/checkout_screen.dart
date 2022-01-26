@@ -115,10 +115,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Future<void> guestPayment(method, finalTotal) async {
     showLoader(context);
     showToast("Placing order", Constants.primaryColor);
-    MyUser create = await UserRepositoryImpl.createGuestAccount(user: user);
-    if (create.id != "0") {
+    // MyUser create = await UserRepositoryImpl.createGuestAccount(user: user);
+    if (user.id != "0") {
       bool ordered = await ProductRepositoryImpl.createOrder(
-          id: create.id!,
+          id: user.id!,
           total: finalTotal,
           payment: method,
           items: widget.cartItems);
@@ -126,6 +126,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         await BlocProvider.of<CartCubit>(context).emptyCart();
         pop(context);
         showToast("Success", Colors.green);
+        await ProductRepositoryImpl.sendEmail(email: user.email);
       } else {
         showToast("Could not place order", Colors.red);
       }
@@ -145,6 +146,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       await BlocProvider.of<CartCubit>(context).emptyCart();
       pop(context);
       showToast("Success", Colors.green);
+      await ProductRepositoryImpl.sendEmail(email: user.email);
     } else {
       showToast("Could not place order", Colors.red);
     }
@@ -208,6 +210,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             checkOut: true,
                             log: false,
                           )));
+              debugPrint("GUEST ID: ${guest.id}");
               if (guest.id != "0") {
                 setState(() {
                   user = guest;

@@ -161,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 2),
                               child: getTextField(phone, "Phone", Icons.phone,
-                                  TextInputType.name, (val) {
+                                  TextInputType.number, (val) {
                                 Pattern pattern = r'^[0-9]';
                                 RegExp regex = RegExp(pattern.toString());
                                 if (regex.hasMatch(
@@ -244,9 +244,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 2),
                               child: getTextField(address2, "Address2",
-                                  Icons.home, TextInputType.name, (val) {
-                                return null;
-                              }, false)),
+                                  Icons.home, TextInputType.name, null, false)),
                           Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 2),
@@ -254,7 +252,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   zip,
                                   "Zip Code",
                                   Icons.local_shipping,
-                                  TextInputType.name, (val) {
+                                  TextInputType.number, (val) {
                                 if (val.toString().isEmpty) {
                                   return "Please enter Zip Code";
                                 } else {
@@ -279,8 +277,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               city.text != "" &&
                               phone.text != "" &&
                               zip.text != "" &&
-                              address.text != "" &&
-                              address2.text != "") {
+                              address.text != "") {
                             // debugPrint(zip.text.toString());
                             bool created =
                                 await BlocProvider.of<UserCubit>(context)

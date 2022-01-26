@@ -164,6 +164,27 @@ class ProductRepositoryImpl implements ProductRepository {
     }
   }
 
+  static Future<void> sendEmail({email}) async {
+    try {
+      var resp = await http
+          .get(Uri.parse("https://damascent.com/shopping.php?email=" + email));
+      if (resp.statusCode == 200 || resp.statusCode == 201) {
+        debugPrint(
+            "EMAIL SENT : https://damascent.com/shopping.php?email=waseem.noah@gmail.com");
+        debugPrint(resp.body);
+        // showToast("Email registered", Constants.primaryColor);
+      } else if (resp.statusCode == 400) {
+        showToast(json.decode(resp.body), Constants.primaryColor);
+      } else if (resp.statusCode == 500) {
+        showToast(json.decode(resp.body), Constants.primaryColor);
+      } else {
+        showToast(json.decode(resp.body), Constants.primaryColor);
+      }
+    } catch (e) {
+      showToast(e.toString(), Constants.primaryColor);
+    }
+  }
+
   @override
   Future<List<Order>> getAllOrders({required String id}) async {
     try {

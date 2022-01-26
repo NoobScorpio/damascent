@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
+import 'package:damascent/data_management/repos/user_repo.dart';
 import 'package:damascent/state_management/user/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -375,7 +376,7 @@ class _PersonalInformationState extends State<PersonalInformation> {
                             }
                           }
                         } else {
-                          showToast("Saving Data", Constants.primaryColor);
+                          showLoader(context);
                           SharedPreferences sp =
                               await SharedPreferences.getInstance();
                           MyUser guest = MyUser(
@@ -391,9 +392,12 @@ class _PersonalInformationState extends State<PersonalInformation> {
                               address: address.text.toString(),
                               address1: address2.text.toString(),
                               id: "");
-                          await sp.setString(
-                              "guest", json.encode(guest.toJson()));
-                          Navigator.pop(context, guest);
+                          MyUser u =
+                              await UserRepositoryImpl.createGuestAccount(
+                                  user: guest);
+                          await sp.setString("guest", json.encode(u.toJson()));
+                          Navigator.pop(context);
+                          Navigator.pop(context, u);
                           showToast("Saved", Constants.primaryColor);
                         }
                       }

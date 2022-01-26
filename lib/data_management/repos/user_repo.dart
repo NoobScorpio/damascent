@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:damascent/constants/common_functions.dart';
 import 'package:damascent/constants/constants.dart';
 import 'package:damascent/data_management/models/my_user.dart';
@@ -77,11 +78,10 @@ class UserRepositoryImpl implements UserRepository {
           "city": user.city.toString(),
           "zip": user.zip.toString(),
           "address": user.address.toString(),
-          "address1": user.address1.toString(),
+          "address1": user.address1 == "" ? "NA" : user.address1.toString(),
           "password": " ",
         }));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // debugPrint("${json.decode(response.body)['message']}");
       SharedPreferences sp = await SharedPreferences.getInstance();
       var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
       List<MyUser> users =
@@ -94,12 +94,10 @@ class UserRepositoryImpl implements UserRepository {
       await sp.setString('guest', json.encode(user.toJson()));
       return user;
     } else if (response.statusCode == 400) {
-      // debugPrint(response.body.toString());
       showToast(json.decode(response.body)['message'], Constants.primaryColor);
       return MyUser(id: "0");
     } else if (response.statusCode == 500) {
       showToast('Internal server error.', Constants.primaryColor);
-
       return MyUser(id: "0");
     } else {
       showToast('Something went wrong', Constants.primaryColor);
@@ -128,54 +126,70 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   static Future<bool> createAccount({required MyUser user}) async {
-    var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
-    List<MyUser> users = UserResultModel.fromJson(json.decode(resp.body)).users;
-    for (MyUser usr in users) {
-      if (usr.email == user.email) {
-        showToast("Email already taken", Constants.primaryColor);
-        return false;
-      }
-    }
-    var response = await http.post(Uri.parse(baseURL + "/create.php"),
-        body: json.encode({
-          "fname": user.fName.toString(),
-          "lname": user.lName.toString(),
-          "email": user.email.toString(),
-          "phone": user.phone.toString(),
-          "country": user.country.toString(),
-          "state": user.state.toString(),
-          "city": user.city.toString(),
-          "zip": user.zip.toString(),
-          "address": user.address.toString(),
-          "address1": user.address1.toString(),
-          "password": user.password.toString(),
-        }));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // debugPrint("${json.decode(response.body)['message']}");
-      SharedPreferences sp = await SharedPreferences.getInstance();
+    try {
       var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
-      List<MyUser> users =
-          UserResultModel.fromJson(json.decode(resp.body)).users;
-      for (MyUser usr in users) {
-        if (usr.email == user.email) {
-          user = usr;
+      // debugPrint("USERS : ${json.decode(resp.body)}");
+
+      if (json.decode(resp.body)['records'] != null) {
+        List<MyUser> users =
+            UserResultModel.fromJson(json.decode(resp.body)).users;
+        for (MyUser usr in users) {
+          if (usr.email == user.email) {
+            showToast("Email already taken", Constants.primaryColor);
+            return false;
+          }
         }
       }
-      await sp.setString('user', json.encode(user.toJson()));
-      await sp.setBool('loggedIn', true);
-      // debugPrint("RETURNING API ${json.decode(response.body)['message']}");
-      await sendEmail(email: user.email);
-      return true;
-    } else if (response.statusCode == 400) {
-      // debugPrint(response.body.toString());
-      showToast(json.decode(response.body)['message'], Constants.primaryColor);
-      return false;
-    } else if (response.statusCode == 500) {
-      showToast('Internal server error.', Constants.primaryColor);
+      var data = {
+        "fname": user.fName.toString(),
+        "lname": user.lName.toString(),
+        "email": user.email.toString(),
+        "phone": user.phone.toString(),
+        "country": user.country.toString(),
+        "state": user.state.toString(),
+        "city": user.city.toString(),
+        "zip": user.zip.toString(),
+        "address": user.address.toString(),
+        "address1": user.address1 == "" ? "NA" : user.address1.toString(),
+        "password": user.password.toString(),
+      };
+      debugPrint(json.encode(data));
+      var response = await http.post(Uri.parse(baseURL + "/create.php"),
+          body: json.encode(data));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint("${json.decode(response.body)['message']}");
+        SharedPreferences sp = await SharedPreferences.getInstance();
+        var resp = await http.get(Uri.parse(baseURL + "/profile.php"));
+        List<MyUser> users =
+            UserResultModel.fromJson(json.decode(resp.body)).users;
+        for (MyUser usr in users) {
+          if (usr.email == user.email) {
+            user = usr;
+          }
+        }
+        await sp.setString('user', json.encode(user.toJson()));
+        await sp.setBool('loggedIn', true);
+        // debugPrint("RETURNING API ${json.decode(response.body)['message']}");
+        await sendEmail(email: user.email);
+        return true;
+      } else if (response.statusCode == 400) {
+        // debugPrint(response.body.toString());
+        debugPrint("400 ${json.decode(response.body)}");
+        showToast(
+            json.decode(response.body)['message'], Constants.primaryColor);
+        return false;
+      } else if (response.statusCode == 500) {
+        debugPrint(" 500 ${json.decode(response.body)['message']}");
+        showToast('Internal server error.', Constants.primaryColor);
 
-      return false;
-    } else {
-      showToast('Something went wrong', Constants.primaryColor);
+        return false;
+      } else {
+        debugPrint("${json.decode(response.body)}");
+        showToast('Something went wrong', Constants.primaryColor);
+        return false;
+      }
+    } catch (e, st) {
+      debugPrint("CREATE ERROR: $st");
       return false;
     }
   }
