@@ -252,7 +252,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   zip,
                                   "Zip Code",
                                   Icons.local_shipping,
-                                  TextInputType.number, (val) {
+                                  TextInputType.name, (val) {
                                 if (val.toString().isEmpty) {
                                   return "Please enter Zip Code";
                                 } else {
